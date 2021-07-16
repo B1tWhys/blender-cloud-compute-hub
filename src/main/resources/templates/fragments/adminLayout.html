@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>Layout page</title>
+    <link th:href="@{/webjars/bootstrap/4.6.0-1/css/bootstrap.min.css}" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+</head>
+<body>
+<nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+    <div class="collapse navbar-collapse" id="collapsibleNavbar">
+        <ul class="navbar-nav align-items-baseline">
+            <li class="nav-item"><a th:href="@{/managers}" href="managers.html" class="nav-link active">Managers</a></li>
+        </ul>
+    </div>
+</nav>
+<section layout:fragment="content">
+    <p>Page content</p>
+</section>
+<script th:src="@{/webjars/jquery/3.5.1/jquery.min.js}"></script>
+<script th:src="@{/webjars/popper.js/1.12.9/umd/popper.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/4.6.0-1/js/bootstrap.min.js}"></script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{fragments/adminLayout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Managers</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+<nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+    <div class="collapse navbar-collapse" id="collapsibleNavbar">
+        <ul class="navbar-nav align-items-baseline">
+            <li class="nav-item"><a th:href="@{/managers}" href="managers.html" class="nav-link active">Managers</a></li>
+        </ul>
+    </div>
+</nav>
+<section layout:fragment="content">
+    <h1 class="m-2 m-sm-4">Managers</h1>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">id</th>
+            <th scope="col">state</th>
+        </tr>
+        </thead>
+        <tr>
+            <th scope="row">
+                <a href="managerDetails.html?managerId=0f7c6bdb-fcb8-4d70-8f4f-02ddbdc54dde">0f7c6bdb-fcb8-4d70-8f4f-02ddbdc54dde</a>
+            </th>
+            <th>new</th>
+        </tr>
+        <tr>
+            <th scope="row">
+                <a href="managerDetails.html?managerId=8844be2f-6c56-40e2-a65d-cd6bf05c497b">8844be2f-6c56-40e2-a65d-cd6bf05c497b</a>
+            </th>
+            <th>pending</th>
+        </tr>
+        <tr>
+            <th scope="row">
+                <a href="managerDetails.html?managerId=abd78798-f668-4984-8c20-0a54cedb5941">abd78798-f668-4984-8c20-0a54cedb5941</a>
+            </th>
+            <th>active</th>
+        </tr>
+        <tr>
+            <th scope="row">
+                <a href="managerDetails.html?managerId=dafd6394-f3fc-486b-a09f-e2f1ab90c5a3">dafd6394-f3fc-486b-a09f-e2f1ab90c5a3</a>
+            </th>
+            <th>deleting</th>
+        </tr>
+    </table>
+</section>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+</html>
