@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{fragments/adminLayout}">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{fragments/adminLayout}">
 <head>
     <meta charset="UTF-8">
     <title>Managers</title>
@@ -20,31 +20,15 @@
         <tr>
             <th scope="col">id</th>
             <th scope="col">state</th>
+            <th scope="col">created timestamp</th>
         </tr>
         </thead>
-        <tr>
+        <tr th:each="manager : ${managers}">
             <th scope="row">
-                <a href="managerDetails.html?managerId=0f7c6bdb-fcb8-4d70-8f4f-02ddbdc54dde">0f7c6bdb-fcb8-4d70-8f4f-02ddbdc54dde</a>
+                <a th:text="${manager.id}" th:href="@{managerDetails.html(managerId=${manager.id})}" href="managerDetails.html?managerId=0f7c6bdb-fcb8-4d70-8f4f-02ddbdc54dde">0f7c6bdb-fcb8-4d70-8f4f-02ddbdc54dde</a>
             </th>
-            <th>new</th>
-        </tr>
-        <tr>
-            <th scope="row">
-                <a href="managerDetails.html?managerId=8844be2f-6c56-40e2-a65d-cd6bf05c497b">8844be2f-6c56-40e2-a65d-cd6bf05c497b</a>
-            </th>
-            <th>pending</th>
-        </tr>
-        <tr>
-            <th scope="row">
-                <a href="managerDetails.html?managerId=abd78798-f668-4984-8c20-0a54cedb5941">abd78798-f668-4984-8c20-0a54cedb5941</a>
-            </th>
-            <th>active</th>
-        </tr>
-        <tr>
-            <th scope="row">
-                <a href="managerDetails.html?managerId=dafd6394-f3fc-486b-a09f-e2f1ab90c5a3">dafd6394-f3fc-486b-a09f-e2f1ab90c5a3</a>
-            </th>
-            <th>deleting</th>
+            <th th:text="${manager.state}">new</th>
+            <th th:text="${manager.humanReadableCreatedTs}">10:58pm yesterday</th>
         </tr>
     </table>
 </section>
