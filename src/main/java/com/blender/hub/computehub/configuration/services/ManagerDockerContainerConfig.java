@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 @Data
 @ConfigurationProperties("manager.container")
 @Configuration
-public class ManagerContainerConfig {
+public class ManagerDockerContainerConfig {
     private String imageName;
     private int apiPort;
 }
