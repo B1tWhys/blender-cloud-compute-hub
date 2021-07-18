@@ -2,7 +2,7 @@ package com.blender.hub.computehub.core.mock;
 
 
 import com.blender.hub.computehub.core.manager.entity.Manager;
-import com.blender.hub.computehub.core.manager.port.driven.ManagerRepo;
+import com.blender.hub.computehub.core.manager.port.adapter.ManagerRepo;
 
 import java.util.HashMap;
 import java.util.List;
@@ -25,6 +25,6 @@ public class InMemoryManagerRepository implements ManagerRepo {
 
     @Override
     public void upsert(Manager manager) {
-        managerMap.put(manager.id, manager.toBuilder().build());
+        managerMap.put(manager.getId(), manager.toBuilder().build());
     }
 }

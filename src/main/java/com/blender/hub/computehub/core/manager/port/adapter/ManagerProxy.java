@@ -1,4 +1,4 @@
-package com.blender.hub.computehub.core.manager.port.driven;
+package com.blender.hub.computehub.core.manager.port.adapter;
 
 public interface ManagerProxy {
     /**

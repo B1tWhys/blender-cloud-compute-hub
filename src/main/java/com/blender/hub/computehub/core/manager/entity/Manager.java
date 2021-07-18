@@ -2,15 +2,18 @@ package com.blender.hub.computehub.core.manager.entity;
 
 import com.blender.hub.computehub.core.hmac.entity.HmacSecret;
 import lombok.Builder;
+import lombok.Data;
 
 import java.util.Date;
 
 @Builder(toBuilder = true)
+@Data
 public class Manager {
-    public final String id;
-    public HmacSecret hmacSecret;
+    private final String id;
+    private Hostname hostname;
+    private HmacSecret hmacSecret;
     private ManagerState state;
-    public final Date createdTs;
+    private final Date createdTs;
 
     public ManagerState getState() {
         return state;

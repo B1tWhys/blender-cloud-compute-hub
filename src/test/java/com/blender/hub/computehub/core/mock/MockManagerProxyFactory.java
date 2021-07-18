@@ -2,15 +2,15 @@ package com.blender.hub.computehub.core.mock;
 
 import com.blender.hub.computehub.core.hmac.usecase.CreateHmacSecret;
 import com.blender.hub.computehub.core.manager.entity.Manager;
-import com.blender.hub.computehub.core.manager.port.driven.ManagerProxy;
-import com.blender.hub.computehub.core.manager.port.driven.ManagerProxyFactory;
+import com.blender.hub.computehub.core.manager.port.adapter.ManagerProxy;
+import com.blender.hub.computehub.core.manager.port.adapter.ManagerProxyFactory;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class MockManagerProxyFactory implements ManagerProxyFactory {
     public Map<Manager, ManagerProxy> proxies = new HashMap<>();
-    private CreateHmacSecret createHmacSecret;
+    private final CreateHmacSecret createHmacSecret;
     
     public MockManagerProxyFactory(CreateHmacSecret createHmacSecret) {
         this.createHmacSecret = createHmacSecret;

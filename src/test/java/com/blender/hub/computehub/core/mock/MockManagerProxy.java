@@ -3,7 +3,7 @@ package com.blender.hub.computehub.core.mock;
 import com.blender.hub.computehub.core.hmac.entity.HmacSecret;
 import com.blender.hub.computehub.core.hmac.usecase.CreateHmacSecret;
 import com.blender.hub.computehub.core.manager.entity.LinkingException;
-import com.blender.hub.computehub.core.manager.port.driven.ManagerProxy;
+import com.blender.hub.computehub.core.manager.port.adapter.ManagerProxy;
 
 public class MockManagerProxy implements ManagerProxy {
     public static final String MOCK_HMAC_SECRET_VALUE = "secret!";

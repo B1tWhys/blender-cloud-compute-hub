@@ -73,10 +73,10 @@ public class LinkManagerTest {
     void keyIsAssociatedWithManager() {
         useCase.link(manager);
         
-        Manager currentManager = managerRepository.get(manager.id).orElse(null);
+        Manager currentManager = managerRepository.get(manager.getId()).orElse(null);
         assertNotNull(currentManager);
-        assertNotNull(currentManager.hmacSecret);
-        assertEquals(mockManagerProxy.hmacSecret, currentManager.hmacSecret);
+        assertNotNull(currentManager.getHmacSecret());
+        assertEquals(mockManagerProxy.hmacSecret, currentManager.getHmacSecret());
     }
     
     @Test

@@ -1,7 +1,7 @@
 package com.blender.hub.computehub.core.manager.usecase;
 
 import com.blender.hub.computehub.core.manager.entity.Manager;
-import com.blender.hub.computehub.core.manager.port.driven.ManagerRepo;
+import com.blender.hub.computehub.core.manager.port.adapter.ManagerRepo;
 import com.blender.hub.computehub.core.manager.port.driving.ListManagers;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
