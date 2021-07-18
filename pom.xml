@@ -16,6 +16,7 @@
     <properties>
         <java.version>11</java.version>
         <mockito.version>3.11.1</mockito.version>
+        <docker-java.version>3.2.11</docker-java.version>
     </properties>
     <dependencies>
         <dependency>
@@ -97,6 +98,17 @@
             <version>${mockito.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.github.docker-java</groupId>
+            <artifactId>docker-java-core</artifactId>
+            <version>${docker-java.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.docker-java</groupId>
+            <artifactId>docker-java-transport</artifactId>
+            <version>${docker-java.version}</version>
+        </dependency>
+
 
     </dependencies>
 
