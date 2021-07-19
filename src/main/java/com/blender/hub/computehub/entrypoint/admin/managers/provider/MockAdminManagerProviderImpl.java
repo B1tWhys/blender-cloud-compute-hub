@@ -10,6 +10,7 @@ import java.util.List;
 @Slf4j
 public class MockAdminManagerProviderImpl implements AdminManagerProvider {
     public List<AdminWireManager> listWireManagers(int limit) {
+        log.info("returning mocked list of managers");
         return List.of(
                 AdminWireManager.builder().id("foo").state("NEW").humanReadableCreatedTs("yesterday").build(),
                 AdminWireManager.builder().id("bar").state("PENDING_HMAC").humanReadableCreatedTs("today").build(),

@@ -1,6 +1,8 @@
 package com.blender.hub.computehub.entrypoint.admin.managers.provider;
 
+import com.blender.hub.computehub.core.manager.entity.CreateManagerCommand;
 import com.blender.hub.computehub.core.manager.port.adapter.ManagerRepo;
+import com.blender.hub.computehub.core.manager.port.driving.CreateManager;
 import com.blender.hub.computehub.entrypoint.admin.managers.wire.AdminWireManager;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +14,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class AdminManagerProviderImpl implements AdminManagerProvider {
     ManagerRepo managerRepo;
+    CreateManager createManagerUseCase;
 
     @Override
     public List<AdminWireManager> listWireManagers(int limit) {
@@ -24,6 +27,7 @@ public class AdminManagerProviderImpl implements AdminManagerProvider {
 
     @Override
     public void create() {
-
+        CreateManagerCommand command = CreateManagerCommand.builder().build();
+        createManagerUseCase.createManager(command);
     }
 }
