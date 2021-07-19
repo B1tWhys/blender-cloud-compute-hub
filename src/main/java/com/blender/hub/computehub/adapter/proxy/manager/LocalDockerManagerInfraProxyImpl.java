@@ -5,10 +5,9 @@ import com.blender.hub.computehub.core.manager.entity.Hostname;
 import com.blender.hub.computehub.core.manager.entity.Manager;
 import com.blender.hub.computehub.core.manager.port.adapter.ManagerInfraProxy;
 import com.github.dockerjava.api.DockerClient;
+import com.github.dockerjava.api.command.CreateContainerCmd;
 import com.github.dockerjava.api.command.CreateContainerResponse;
-import com.github.dockerjava.api.model.ExposedPort;
-import com.github.dockerjava.api.model.NetworkSettings;
-import com.github.dockerjava.api.model.Ports;
+import com.github.dockerjava.api.model.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -20,17 +19,35 @@ public class LocalDockerManagerInfraProxyImpl implements ManagerInfraProxy {
 
     @Override
     public Hostname createInfraFor(Manager manager) {
-        log.info("Creating docker container for manager id: {}", manager);
-        CreateContainerResponse createResponse = dockerClient.createContainerCmd(config.getImageName())
-                .withName(manager.getId())
-                .withExposedPorts(ExposedPort.tcp(config.getApiPort()))
-                .exec();
+        String containerId = createManagerContainer(manager);
+        log.info("Container id for manager {} is: {}", manager.getId(), containerId);
 
-        NetworkSettings networkSettings = dockerClient.inspectContainerCmd(createResponse.getId()).exec().getNetworkSettings();
-        Ports ports = networkSettings.getPorts();
-        Ports.Binding[] bindings = ports.getBindings().get(ExposedPort.tcp(config.getApiPort()));
-        String port = bindings[0].getHostPortSpec();
+        String port = getContainerPort(containerId);
+        log.info("Manger: {} listening on host port: {}", manager.getId(), port);
 
         return new Hostname("localhost:" + port);
+    }
+
+    private String createManagerContainer(Manager manager) {
+        log.info("Creating docker container for manager id: {}", manager);
+        PortBinding portBinding = PortBinding.parse("0:" + config.getApiPort() + "/tcp");
+        CreateContainerCmd createContainerCmd = dockerClient.createContainerCmd(config.getImageName())
+                .withName(manager.getId())
+                .withHostConfig(new HostConfig().withPortBindings(portBinding))
+                .withExposedPorts(ExposedPort.tcp(config.getApiPort()));
+        log.debug("Create container command: {}", createContainerCmd);
+        CreateContainerResponse createResponse = createContainerCmd.exec();
+
+        String containerid = createResponse.getId();
+        dockerClient.startContainerCmd(containerid).exec();
+        return containerid;
+    }
+
+    private String getContainerPort(String containerId) {
+        NetworkSettings networkSettings = dockerClient.inspectContainerCmd(containerId).exec().getNetworkSettings();
+        log.debug("network settings for container {}: {}", containerId, networkSettings);
+        Ports ports = networkSettings.getPorts();
+        Ports.Binding[] bindings = ports.getBindings().get(ExposedPort.tcp(config.getApiPort()));
+        return bindings[0].getHostPortSpec();
     }
 }

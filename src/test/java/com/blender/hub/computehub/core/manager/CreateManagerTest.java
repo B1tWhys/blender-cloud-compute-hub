@@ -3,11 +3,15 @@ package com.blender.hub.computehub.core.manager;
 import com.blender.hub.computehub.core.manager.entity.CreateManagerCommand;
 import com.blender.hub.computehub.core.manager.entity.Hostname;
 import com.blender.hub.computehub.core.manager.entity.Manager;
+import com.blender.hub.computehub.core.manager.entity.ManagerState;
 import com.blender.hub.computehub.core.manager.port.adapter.ManagerInfraProxy;
 import com.blender.hub.computehub.core.manager.port.driving.CreateManager;
 import com.blender.hub.computehub.core.manager.usecase.CreateManagerImpl;
 import com.blender.hub.computehub.core.mock.InMemoryManagerRepository;
 import com.blender.hub.computehub.core.mock.MockManagerIdGenerator;
+import org.joda.time.DateTime;
+import org.joda.time.Period;
+import org.joda.time.PeriodType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -56,6 +60,21 @@ public class CreateManagerTest {
         createManager();
         String lastManagerId = String.valueOf(managerIdGenerator.lastManagerId);
         assertEquals(lastManagerId, manager.getId());
+    }
+
+    @Test
+    void testCreateManagerWithCurrentDate() {
+        createManager();
+        assertNotNull(manager.getCreatedTs());
+        Period diff = new Period(new DateTime(), manager.getCreatedTs(), PeriodType.millis());
+        assertEquals(diff.getMillis(), 0, 30);
+    }
+
+    @Test
+    void testCreateManagerWithState() {
+        createManager();
+        assertNotNull(manager.getState());
+        assertEquals(manager.getState(), ManagerState.NEW);
     }
     
     @Test

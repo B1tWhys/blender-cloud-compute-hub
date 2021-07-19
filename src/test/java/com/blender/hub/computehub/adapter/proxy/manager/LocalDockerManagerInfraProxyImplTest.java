@@ -5,24 +5,25 @@ import com.blender.hub.computehub.core.manager.entity.Hostname;
 import com.blender.hub.computehub.core.manager.entity.Manager;
 import com.blender.hub.computehub.core.manager.port.adapter.ManagerInfraProxy;
 import com.github.dockerjava.api.DockerClient;
-import com.github.dockerjava.api.command.CreateContainerCmd;
-import com.github.dockerjava.api.command.CreateContainerResponse;
-import com.github.dockerjava.api.command.InspectContainerCmd;
-import com.github.dockerjava.api.command.InspectContainerResponse;
+import com.github.dockerjava.api.command.*;
 import com.github.dockerjava.api.model.*;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Answers;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Map;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
+@Slf4j
 class LocalDockerManagerInfraProxyImplTest {
     private static final String IMAGE_NAME = "flamencoManager:1";
     private static final int FLAMENCO_PORT = 8000;
@@ -57,6 +58,7 @@ class LocalDockerManagerInfraProxyImplTest {
         CreateContainerResponse createContainerResponse = new CreateContainerResponse();
         createContainerResponse.setId(CONTAINER_ID);
         when(createContainerCmd.exec()).thenReturn(createContainerResponse);
+        when(dockerClient.startContainerCmd(CONTAINER_ID)).thenReturn(mock(StartContainerCmd.class));
 
         InspectContainerResponse inspectResponse = mock(InspectContainerResponse.class);
         NetworkSettings networkSettings = mock(NetworkSettings.class);
@@ -70,11 +72,24 @@ class LocalDockerManagerInfraProxyImplTest {
 
     @Test
     void containerIsCreated() {
+        ArgumentCaptor<HostConfig> hostConfigArgCaptor = ArgumentCaptor.forClass(HostConfig.class);
+
         infraProxy.createInfraFor(manager);
         verify(dockerClient, times(1)).createContainerCmd(IMAGE_NAME);
         verify(createContainerCmd, times(1)).withName(manager.getId());
+        verify(createContainerCmd, times(1)).withHostConfig(hostConfigArgCaptor.capture());
         verify(createContainerCmd, times(1)).withExposedPorts(ExposedPort.tcp(FLAMENCO_PORT));
         verify(createContainerCmd, times(1)).exec();
+
+        Map<ExposedPort, Ports.Binding[]> bindings = hostConfigArgCaptor.getValue().getPortBindings().getBindings();
+        String actualBinding = bindings.get(ExposedPort.tcp(FLAMENCO_PORT))[0].toString();
+        assertEquals("0", actualBinding);
+    }
+
+    @Test
+    void containerIsStarted() {
+        infraProxy.createInfraFor(manager);
+        verify(dockerClient, times(1)).startContainerCmd(CONTAINER_ID);
     }
 
     @Test

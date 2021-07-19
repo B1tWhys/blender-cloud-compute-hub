@@ -3,8 +3,7 @@ package com.blender.hub.computehub.core.manager.entity;
 import com.blender.hub.computehub.core.hmac.entity.HmacSecret;
 import lombok.Builder;
 import lombok.Data;
-
-import java.util.Date;
+import org.joda.time.DateTime;
 
 @Builder(toBuilder = true)
 @Data
@@ -13,7 +12,7 @@ public class Manager {
     private Hostname hostname;
     private HmacSecret hmacSecret;
     private ManagerState state;
-    private final Date createdTs;
+    private final DateTime createdTs;
 
     public ManagerState getState() {
         return state;
