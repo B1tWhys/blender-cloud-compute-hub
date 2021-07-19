@@ -1,6 +1,6 @@
-package com.blender.hub.computehub.adapter.manager;
+package com.blender.hub.computehub.adapter.proxy.manager;
 
-import com.blender.hub.computehub.configuration.services.ManagerDockerContainerConfig;
+import com.blender.hub.computehub.configuration.services.ManagerDockerContainerProperties;
 import com.blender.hub.computehub.core.manager.entity.Hostname;
 import com.blender.hub.computehub.core.manager.entity.Manager;
 import com.blender.hub.computehub.core.manager.port.adapter.ManagerInfraProxy;
@@ -15,7 +15,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Answers;
 import org.mockito.Mock;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.UUID;
@@ -47,7 +46,7 @@ class LocalDockerManagerInfraProxyImplTest {
         manager = Manager.builder().id(UUID.randomUUID().toString()).build();
 
         // infraProxy setup
-        ManagerDockerContainerConfig config = new ManagerDockerContainerConfig();
+        ManagerDockerContainerProperties config = new ManagerDockerContainerProperties();
         config.setImageName(IMAGE_NAME);
         config.setApiPort(FLAMENCO_PORT);
         infraProxy = new LocalDockerManagerInfraProxyImpl(dockerClient, config);

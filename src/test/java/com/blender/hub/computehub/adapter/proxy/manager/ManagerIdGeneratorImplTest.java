@@ -1,11 +1,10 @@
-package com.blender.hub.computehub.adapter.manager;
+package com.blender.hub.computehub.adapter.proxy.manager;
 
 import com.blender.hub.computehub.core.manager.port.adapter.ManagerIdGenerator;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;

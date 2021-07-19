@@ -5,5 +5,7 @@ import com.blender.hub.computehub.entrypoint.admin.managers.wire.AdminWireManage
 import java.util.List;
 
 public interface AdminManagerProvider {
-    List<AdminWireManager> listWireManagers();
+    List<AdminWireManager> listWireManagers(int limit);
+
+    void create();
 }

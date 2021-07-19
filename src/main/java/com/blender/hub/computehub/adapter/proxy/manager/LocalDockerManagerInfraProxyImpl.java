@@ -1,12 +1,11 @@
-package com.blender.hub.computehub.adapter.manager;
+package com.blender.hub.computehub.adapter.proxy.manager;
 
-import com.blender.hub.computehub.configuration.services.ManagerDockerContainerConfig;
+import com.blender.hub.computehub.configuration.services.ManagerDockerContainerProperties;
 import com.blender.hub.computehub.core.manager.entity.Hostname;
 import com.blender.hub.computehub.core.manager.entity.Manager;
 import com.blender.hub.computehub.core.manager.port.adapter.ManagerInfraProxy;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.CreateContainerResponse;
-import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.model.ExposedPort;
 import com.github.dockerjava.api.model.NetworkSettings;
 import com.github.dockerjava.api.model.Ports;
@@ -17,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class LocalDockerManagerInfraProxyImpl implements ManagerInfraProxy {
     private final DockerClient dockerClient;
-    private final ManagerDockerContainerConfig config;
+    private final ManagerDockerContainerProperties config;
 
     @Override
     public Hostname createInfraFor(Manager manager) {
