@@ -8,7 +8,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -21,7 +20,7 @@ public class AdminManagerProviderImpl implements AdminManagerProvider {
     public List<AdminWireManager> listWireManagers(int limit) {
         return managerRepo.getMostRecentlyCreated(limit).stream().map(m -> AdminWireManager.builder()
                 .id(m.getId())
-                .state(Optional.ofNullable(m.getState()).map(Enum::name).orElse("")) // FIXME
+                .state(m.getState().name())
                 .humanReadableCreatedTs(m.getCreatedTs().toString()) // FIXME
                 .build()).collect(Collectors.toList());
     }
