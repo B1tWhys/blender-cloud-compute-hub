@@ -3,6 +3,7 @@ package com.blender.hub.computehub.configuration.services;
 import com.blender.hub.computehub.adapter.persistance.InMemoryManagerRepoImpl;
 import com.blender.hub.computehub.core.manager.port.adapter.ManagerRepo;
 import com.blender.hub.computehub.entrypoint.admin.managers.provider.AdminManagerProvider;
+import com.blender.hub.computehub.entrypoint.admin.managers.provider.AdminManagerProviderImpl;
 import com.blender.hub.computehub.entrypoint.admin.managers.provider.MockAdminManagerProviderImpl;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -14,6 +15,11 @@ public class ManagerConfig {
     @ConditionalOnMissingBean(type = "AdminManagerProvider")
     AdminManagerProvider mockAdminManagerProvider() {
         return new MockAdminManagerProviderImpl();
+    }
+
+    @Bean(name = "adminManagerProvider")
+    AdminManagerProvider realAdminManagerProvider(ManagerRepo managerRepo) {
+        return new AdminManagerProviderImpl(managerRepo);
     }
 
     @Bean
