@@ -1,5 +1,6 @@
 package com.blender.hub.computehub.adapter.persistance;
 
+import com.blender.hub.computehub.core.hmac.entity.HmacSecret;
 import com.blender.hub.computehub.core.manager.entity.Manager;
 import com.blender.hub.computehub.core.manager.port.adapter.ManagerRepo;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +15,17 @@ public class InMemoryManagerRepoImpl implements ManagerRepo {
     @Override
     public Optional<Manager> get(String id) {
         return Optional.ofNullable(managerMap.get(id));
+    }
+
+    @Override
+    public Optional<Manager> getByHmacId(String hmacId) {
+        return managerMap.values().stream()
+                .filter(m -> Optional.of(m)
+                        .map(Manager::getHmacSecret)
+                        .map(HmacSecret::getId)
+                        .map(i -> i.equals(hmacId))
+                        .orElse(false))
+                .findFirst();
     }
 
     @Override

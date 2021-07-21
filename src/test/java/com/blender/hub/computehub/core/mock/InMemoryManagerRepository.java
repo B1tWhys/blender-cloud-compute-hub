@@ -19,6 +19,11 @@ public class InMemoryManagerRepository implements ManagerRepo {
     }
 
     @Override
+    public Optional<Manager> getByHmacId(String hmacId) {
+        return Optional.empty(); // FIXME
+    }
+
+    @Override
     public List<Manager> getMostRecentlyCreated(int limit) {
         return null; // FIXME
     }

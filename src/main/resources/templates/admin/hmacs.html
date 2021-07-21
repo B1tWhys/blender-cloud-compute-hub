@@ -2,36 +2,37 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{fragments/adminLayout}">
 <head>
     <meta charset="UTF-8">
-    <title>Managers</title>
+    <title>Hmac secrets</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
 </head>
 <body>
 <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
     <div class="collapse navbar-collapse" id="collapsibleNavbar">
         <ul class="navbar-nav align-items-baseline">
-            <li class="nav-item"><a href="hmacs.html" class="nav-link active">Managers</a></li>
+            <li class="nav-item"><a href="hmacs.html" class="nav-link active">Hmac Secrets</a></li>
         </ul>
     </div>
 </nav>
 <section layout:fragment="content">
-    <h1 class="m-2 m-sm-4">Managers</h1>
-    <form action="#" th:action="@{managers}" method="post">
-        <input type="submit" value="Create" class="btn btn-outline-primary m-2">
-    </form>
-    <table class="table mx-2 my-2">
+    <h1 class="m-2 m-sm-4">Hmac Secrets</h1>
+    <table class="table m-2">
         <thead>
         <tr>
             <th scope="col">id</th>
-            <th scope="col">state</th>
-            <th scope="col">created timestamp</th>
+            <th scope="col">secret</th>
+            <th scope="col">manager id</th>
         </tr>
         </thead>
-        <tr th:each="manager : ${managers}">
+        <tr th:each="hmac : ${hmacs}">
+            <th scope="row">
+                <div th:text="${hmac.getId()}">0239922f-91d7-4869-9991-dd0ab978d94a</div>
+            </th>
             <td>
-                <a th:text="${manager.id}" th:href="@{managerDetails.html(managerId=${manager.id})}" href="managerDetails.html?managerId=0f7c6bdb-fcb8-4d70-8f4f-02ddbdc54dde">0f7c6bdb-fcb8-4d70-8f4f-02ddbdc54dde</a>
+                <div th:text="${hmac.getValue()}">xxxxxxxxxxxxxxxx</div>
             </td>
-            <td th:text="${manager.state}">new</td>
-            <td th:text="${manager.humanReadableCreatedTs}">10:58pm yesterday</td>
+            <td>
+                <div th:text="${hmac.getManagerId()}">75c24cd0-b609-4929-9680-c0f387dbf878</div>
+            </td>
         </tr>
     </table>
 </section>

@@ -7,6 +7,7 @@ import java.util.Optional;
 
 public interface ManagerRepo {
     Optional<Manager> get(String id);
+    Optional<Manager> getByHmacId(String hmacId);
     List<Manager> getMostRecentlyCreated(int limit);
     void upsert(Manager manager);
 }
