@@ -1,8 +1,12 @@
 package com.blender.hub.computehub.configuration.services;
 
+import com.blender.hub.computehub.adapter.hmac.HmacSecretIdGeneratorImpl;
 import com.blender.hub.computehub.adapter.persistance.InMemoryManagerRepoImpl;
 import com.blender.hub.computehub.adapter.proxy.manager.LocalDockerManagerInfraProxyImpl;
 import com.blender.hub.computehub.adapter.proxy.manager.ManagerIdGeneratorImpl;
+import com.blender.hub.computehub.core.hmac.port.driven.HmacSecretIdGenerator;
+import com.blender.hub.computehub.core.hmac.port.driven.HmacSecretRepository;
+import com.blender.hub.computehub.core.hmac.usecase.CreateHmacSecret;
 import com.blender.hub.computehub.core.manager.port.adapter.ManagerIdGenerator;
 import com.blender.hub.computehub.core.manager.port.adapter.ManagerInfraProxy;
 import com.blender.hub.computehub.core.manager.port.adapter.ManagerRepo;
@@ -52,5 +56,15 @@ public class ManagerConfig {
     public ManagerInfraProxy localDockerManagerInfraProxy(DockerClient dockerClient,
                                                           ManagerDockerContainerProperties managerDockerContainerProperties) {
         return new LocalDockerManagerInfraProxyImpl(dockerClient, managerDockerContainerProperties);
+    }
+
+    @Bean
+    public CreateHmacSecret createHmacSecret(HmacSecretRepository hmacSecretRepository) {
+        return new CreateHmacSecret(secretIdGenerator(), hmacSecretRepository);
+    }
+
+    @Bean
+    public HmacSecretIdGenerator secretIdGenerator() {
+        return new HmacSecretIdGeneratorImpl();
     }
 }
