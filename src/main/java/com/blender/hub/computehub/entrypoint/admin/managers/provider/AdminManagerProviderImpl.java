@@ -1,7 +1,7 @@
 package com.blender.hub.computehub.entrypoint.admin.managers.provider;
 
 import com.blender.hub.computehub.core.manager.entity.CreateManagerCommand;
-import com.blender.hub.computehub.core.manager.port.adapter.ManagerRepo;
+import com.blender.hub.computehub.core.manager.port.driven.ManagerRepo;
 import com.blender.hub.computehub.core.manager.port.driving.CreateManager;
 import com.blender.hub.computehub.entrypoint.admin.managers.wire.AdminWireManager;
 import lombok.AllArgsConstructor;

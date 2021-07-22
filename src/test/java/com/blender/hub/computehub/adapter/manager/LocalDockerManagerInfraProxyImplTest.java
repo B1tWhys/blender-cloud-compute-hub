@@ -1,9 +1,9 @@
-package com.blender.hub.computehub.adapter.proxy.manager;
+package com.blender.hub.computehub.adapter.manager;
 
-import com.blender.hub.computehub.configuration.services.ManagerDockerContainerProperties;
+import com.blender.hub.computehub.application.services.ManagerDockerContainerProperties;
 import com.blender.hub.computehub.core.manager.entity.Hostname;
 import com.blender.hub.computehub.core.manager.entity.Manager;
-import com.blender.hub.computehub.core.manager.port.adapter.ManagerInfraProxy;
+import com.blender.hub.computehub.core.manager.port.driven.ManagerInfraProxy;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.*;
 import com.github.dockerjava.api.model.*;

@@ -1,4 +1,4 @@
-package com.blender.hub.computehub.configuration.services;
+package com.blender.hub.computehub.application.services;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

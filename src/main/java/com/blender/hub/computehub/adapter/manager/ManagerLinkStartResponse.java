@@ -1,4 +1,4 @@
-package com.blender.hub.computehub.adapter.proxy.manager;
+package com.blender.hub.computehub.adapter.manager;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

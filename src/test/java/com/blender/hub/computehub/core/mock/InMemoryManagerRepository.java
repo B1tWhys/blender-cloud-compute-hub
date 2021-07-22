@@ -2,7 +2,7 @@ package com.blender.hub.computehub.core.mock;
 
 
 import com.blender.hub.computehub.core.manager.entity.Manager;
-import com.blender.hub.computehub.core.manager.port.adapter.ManagerRepo;
+import com.blender.hub.computehub.core.manager.port.driven.ManagerRepo;
 
 import java.util.HashMap;
 import java.util.List;

@@ -1,17 +1,17 @@
-package com.blender.hub.computehub.configuration.services;
+package com.blender.hub.computehub.application.services;
 
 import com.blender.hub.computehub.adapter.hmac.HmacSecretIdGeneratorImpl;
 import com.blender.hub.computehub.adapter.persistance.InMemoryManagerRepoImpl;
-import com.blender.hub.computehub.adapter.proxy.manager.LocalDockerManagerInfraProxyImpl;
-import com.blender.hub.computehub.adapter.proxy.manager.ManagerIdGeneratorImpl;
-import com.blender.hub.computehub.adapter.proxy.manager.ManagerProxyFactoryImpl;
+import com.blender.hub.computehub.adapter.manager.LocalDockerManagerInfraProxyImpl;
+import com.blender.hub.computehub.adapter.manager.ManagerIdGeneratorImpl;
+import com.blender.hub.computehub.adapter.manager.ManagerProxyFactoryImpl;
 import com.blender.hub.computehub.core.hmac.port.driven.HmacSecretIdGenerator;
 import com.blender.hub.computehub.core.hmac.port.driven.HmacSecretRepository;
 import com.blender.hub.computehub.core.hmac.usecase.CreateHmacSecret;
-import com.blender.hub.computehub.core.manager.port.adapter.ManagerIdGenerator;
-import com.blender.hub.computehub.core.manager.port.adapter.ManagerInfraProxy;
-import com.blender.hub.computehub.core.manager.port.adapter.ManagerProxyFactory;
-import com.blender.hub.computehub.core.manager.port.adapter.ManagerRepo;
+import com.blender.hub.computehub.core.manager.port.driven.ManagerIdGenerator;
+import com.blender.hub.computehub.core.manager.port.driven.ManagerInfraProxy;
+import com.blender.hub.computehub.core.manager.port.driven.ManagerProxyFactory;
+import com.blender.hub.computehub.core.manager.port.driven.ManagerRepo;
 import com.blender.hub.computehub.core.manager.port.driving.CreateManager;
 import com.blender.hub.computehub.core.manager.port.driving.LinkManager;
 import com.blender.hub.computehub.core.manager.usecase.CreateManagerImpl;

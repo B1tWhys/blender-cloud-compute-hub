@@ -1,4 +1,4 @@
-package com.blender.hub.computehub.configuration.services;
+package com.blender.hub.computehub.application.services;
 
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;

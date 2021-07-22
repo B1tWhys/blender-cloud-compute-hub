@@ -1,4 +1,4 @@
-package com.blender.hub.computehub.configuration.security;
+package com.blender.hub.computehub.application.security;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

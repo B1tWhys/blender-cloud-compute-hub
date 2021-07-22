@@ -1,8 +1,8 @@
-package com.blender.hub.computehub.adapter.proxy.manager;
+package com.blender.hub.computehub.adapter.manager;
 
 import com.blender.hub.computehub.core.manager.entity.Manager;
-import com.blender.hub.computehub.core.manager.port.adapter.ManagerProxy;
-import com.blender.hub.computehub.core.manager.port.adapter.ManagerProxyFactory;
+import com.blender.hub.computehub.core.manager.port.driven.ManagerProxy;
+import com.blender.hub.computehub.core.manager.port.driven.ManagerProxyFactory;
 import lombok.AllArgsConstructor;
 import org.springframework.web.client.RestTemplate;
 

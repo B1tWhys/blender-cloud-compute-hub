@@ -1,12 +1,10 @@
-package com.blender.hub.computehub.adapter.proxy.manager;
+package com.blender.hub.computehub.adapter.manager;
 
 import com.blender.hub.computehub.core.manager.entity.Hostname;
 import com.blender.hub.computehub.core.manager.entity.LinkingException;
-import com.blender.hub.computehub.core.manager.port.adapter.ManagerProxy;
+import com.blender.hub.computehub.core.manager.port.driven.ManagerProxy;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -18,7 +16,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
 import java.util.Optional;
-import java.util.function.Function;
 
 @AllArgsConstructor
 @Slf4j

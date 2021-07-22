@@ -4,7 +4,7 @@ import com.blender.hub.computehub.core.manager.entity.CreateManagerCommand;
 import com.blender.hub.computehub.core.manager.entity.Hostname;
 import com.blender.hub.computehub.core.manager.entity.Manager;
 import com.blender.hub.computehub.core.manager.entity.ManagerState;
-import com.blender.hub.computehub.core.manager.port.adapter.ManagerInfraProxy;
+import com.blender.hub.computehub.core.manager.port.driven.ManagerInfraProxy;
 import com.blender.hub.computehub.core.manager.port.driving.CreateManager;
 import com.blender.hub.computehub.core.manager.port.driving.LinkManager;
 import com.blender.hub.computehub.core.manager.usecase.CreateManagerImpl;
