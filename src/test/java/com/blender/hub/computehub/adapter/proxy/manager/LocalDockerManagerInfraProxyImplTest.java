@@ -98,6 +98,10 @@ class LocalDockerManagerInfraProxyImplTest {
         verify(dockerClient, times(1)).inspectContainerCmd(CONTAINER_ID);
 
         Hostname returnedHostname = infraProxy.createInfraFor(manager);
-        assertEquals(new Hostname("localhost:" + CONTAINER_PORT), returnedHostname);
+        assertEquals(Hostname.builder()
+                .scheme("http")
+                .hostname("localhost")
+                .port(CONTAINER_PORT)
+                .build(), returnedHostname);
     }
 }

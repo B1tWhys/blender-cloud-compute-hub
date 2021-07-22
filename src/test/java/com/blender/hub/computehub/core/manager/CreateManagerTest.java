@@ -6,6 +6,7 @@ import com.blender.hub.computehub.core.manager.entity.Manager;
 import com.blender.hub.computehub.core.manager.entity.ManagerState;
 import com.blender.hub.computehub.core.manager.port.adapter.ManagerInfraProxy;
 import com.blender.hub.computehub.core.manager.port.driving.CreateManager;
+import com.blender.hub.computehub.core.manager.port.driving.LinkManager;
 import com.blender.hub.computehub.core.manager.usecase.CreateManagerImpl;
 import com.blender.hub.computehub.core.mock.InMemoryManagerRepository;
 import com.blender.hub.computehub.core.mock.MockManagerIdGenerator;
@@ -32,6 +33,9 @@ public class CreateManagerTest {
     @Mock
     protected ManagerInfraProxy managerInfraProxy;
 
+    @Mock
+    protected LinkManager linkManager;
+
     protected Manager manager;
     CreateManager createManager;
     
@@ -42,11 +46,12 @@ public class CreateManagerTest {
         managerRepository = new InMemoryManagerRepository();
 
         Mockito.when(managerInfraProxy.createInfraFor(Mockito.any(Manager.class)))
-                .thenReturn(new Hostname(MANAGER_HOSTNAME));
+                .thenReturn(Hostname.builder().scheme("http").hostname(MANAGER_HOSTNAME).port(1234).build());
 
         createManager = new CreateManagerImpl(managerIdGenerator,
                 managerRepository,
-                managerInfraProxy);
+                managerInfraProxy,
+                linkManager);
     }
     
     @Test
@@ -90,7 +95,16 @@ public class CreateManagerTest {
                 .createInfraFor(Mockito.any(Manager.class));
         assertEquals(MANAGER_HOSTNAME, manager.getHostname().getHostname(), "manager hostname must match infrastructure");
     }
-    
+
+    @Test
+    void managerIsLinked() {
+        createManager();
+        Mockito.verify(linkManager, Mockito.times(1))
+                .link(Mockito.eq(manager));
+    }
+
+    // TODO: tests & implementation for manager state changes
+
     private void createManager() {
         CreateManagerCommand command = CreateManagerCommand.builder().build();
         manager = createManager.createManager(command);

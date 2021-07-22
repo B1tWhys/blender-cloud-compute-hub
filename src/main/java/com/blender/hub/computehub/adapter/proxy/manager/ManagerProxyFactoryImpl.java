@@ -12,6 +12,7 @@ public class ManagerProxyFactoryImpl implements ManagerProxyFactory {
 
     @Override
     public ManagerProxy buildManagerProxy(Manager manager) {
-        return null;
+        ManagerProxy proxy = new ManagerProxyImpl(noRedirectRestTemplate, manager.getHostname());
+        return proxy;
     }
 }

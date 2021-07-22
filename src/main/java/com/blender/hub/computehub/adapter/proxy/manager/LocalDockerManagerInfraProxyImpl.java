@@ -22,10 +22,14 @@ public class LocalDockerManagerInfraProxyImpl implements ManagerInfraProxy {
         String containerId = createManagerContainer(manager);
         log.info("Container id for manager {} is: {}", manager.getId(), containerId);
 
-        String port = getContainerPort(containerId);
+        int port = Integer.parseInt(getContainerPort(containerId));
         log.info("Manger: {} listening on host port: {}", manager.getId(), port);
 
-        return new Hostname("localhost:" + port);
+        return Hostname.builder()
+                .scheme(config.getManagerUrlScheme())
+                .hostname("localhost")
+                .port(port)
+                .build();
     }
 
     private String createManagerContainer(Manager manager) {

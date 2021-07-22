@@ -4,14 +4,18 @@ import com.blender.hub.computehub.adapter.hmac.HmacSecretIdGeneratorImpl;
 import com.blender.hub.computehub.adapter.persistance.InMemoryManagerRepoImpl;
 import com.blender.hub.computehub.adapter.proxy.manager.LocalDockerManagerInfraProxyImpl;
 import com.blender.hub.computehub.adapter.proxy.manager.ManagerIdGeneratorImpl;
+import com.blender.hub.computehub.adapter.proxy.manager.ManagerProxyFactoryImpl;
 import com.blender.hub.computehub.core.hmac.port.driven.HmacSecretIdGenerator;
 import com.blender.hub.computehub.core.hmac.port.driven.HmacSecretRepository;
 import com.blender.hub.computehub.core.hmac.usecase.CreateHmacSecret;
 import com.blender.hub.computehub.core.manager.port.adapter.ManagerIdGenerator;
 import com.blender.hub.computehub.core.manager.port.adapter.ManagerInfraProxy;
+import com.blender.hub.computehub.core.manager.port.adapter.ManagerProxyFactory;
 import com.blender.hub.computehub.core.manager.port.adapter.ManagerRepo;
 import com.blender.hub.computehub.core.manager.port.driving.CreateManager;
+import com.blender.hub.computehub.core.manager.port.driving.LinkManager;
 import com.blender.hub.computehub.core.manager.usecase.CreateManagerImpl;
+import com.blender.hub.computehub.core.manager.usecase.LinkManagerImpl;
 import com.blender.hub.computehub.entrypoint.admin.managers.provider.AdminManagerProvider;
 import com.blender.hub.computehub.entrypoint.admin.managers.provider.AdminManagerProviderImpl;
 import com.blender.hub.computehub.entrypoint.admin.managers.provider.MockAdminManagerProviderImpl;
@@ -20,6 +24,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.client.RestTemplate;
 
 @Configuration
 public class ManagerConfig {
@@ -42,8 +47,20 @@ public class ManagerConfig {
     }
 
     @Bean
-    public CreateManager createManagerUseCase(ManagerRepo managerRepo, ManagerInfraProxy managerInfraProxy) {
-        return new CreateManagerImpl(managerIdGenerator(), managerRepo, managerInfraProxy);
+    public CreateManager createManagerUseCase(ManagerRepo managerRepo, ManagerInfraProxy managerInfraProxy, LinkManager linkManager) {
+        return new CreateManagerImpl(managerIdGenerator(), managerRepo, managerInfraProxy, linkManager);
+    }
+
+    @Bean
+    public LinkManager linkManagerUseCase(ManagerProxyFactory proxyFactory,
+                                          ManagerRepo managerRepo,
+                                          HmacSecretRepository hmacSecretRepository) {
+        return new LinkManagerImpl(proxyFactory, managerRepo, hmacSecretRepository);
+    }
+
+    @Bean
+    public ManagerProxyFactory managerProxyFactory(RestTemplate noRedirectRestTemplate) {
+        return new ManagerProxyFactoryImpl(noRedirectRestTemplate);
     }
 
     @Bean

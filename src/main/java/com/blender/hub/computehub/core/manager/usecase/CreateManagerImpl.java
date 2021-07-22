@@ -8,6 +8,7 @@ import com.blender.hub.computehub.core.manager.port.adapter.ManagerInfraProxy;
 import com.blender.hub.computehub.core.manager.port.adapter.ManagerIdGenerator;
 import com.blender.hub.computehub.core.manager.port.adapter.ManagerRepo;
 import com.blender.hub.computehub.core.manager.port.driving.CreateManager;
+import com.blender.hub.computehub.core.manager.port.driving.LinkManager;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
@@ -18,7 +19,8 @@ public class CreateManagerImpl implements CreateManager {
     private final ManagerIdGenerator idGenerator;
     private final ManagerRepo managerRepository;
     private final ManagerInfraProxy infraProxy;
-    
+    private final LinkManager linkManager;
+
     @Override
     public Manager createManager(CreateManagerCommand createManagerCommand) {
         String id = idGenerator.generate();
@@ -32,6 +34,7 @@ public class CreateManagerImpl implements CreateManager {
         Hostname managerHostname = infraProxy.createInfraFor(manager);
         manager.setHostname(managerHostname);
         managerRepository.upsert(manager);
+        linkManager.link(manager);
         return manager;
     }
 }

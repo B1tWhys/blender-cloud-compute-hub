@@ -10,4 +10,5 @@ import org.springframework.context.annotation.Configuration;
 public class ManagerDockerContainerProperties {
     private String imageName;
     private int apiPort;
+    private String managerUrlScheme = "http";
 }
