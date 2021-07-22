@@ -5,12 +5,17 @@ import com.blender.hub.computehub.core.manager.entity.Manager;
 import com.blender.hub.computehub.core.manager.port.adapter.ManagerRepo;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Collectors;
 
 @Slf4j
 public class InMemoryManagerRepoImpl implements ManagerRepo {
-    private final Map<String, Manager> managerMap = new HashMap<>();
+    private final static ConcurrentMap<String, Manager> managerMap = new ConcurrentHashMap<>();
 
     @Override
     public Optional<Manager> get(String id) {

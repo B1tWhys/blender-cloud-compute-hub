@@ -4,14 +4,14 @@ import com.blender.hub.computehub.core.hmac.entity.HmacSecret;
 import com.blender.hub.computehub.core.hmac.port.driven.HmacSecretRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Collectors;
 
 @Service
 public class InMemoryHmacSecretRepoImpl implements HmacSecretRepository {
-    private final Map<String, HmacSecret> secretMap = new HashMap<>();
+    private static final ConcurrentMap<String, HmacSecret> secretMap = new ConcurrentHashMap<>();
 
     @Override
     public void storeHmacSecret(HmacSecret secret) {
