@@ -12,13 +12,6 @@ import org.springframework.web.client.RestTemplate;
 public class RestTemplateConfig {
     @Bean
     RestTemplate noRedirectRestTemplate() {
-//        ClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory() {
-//            @Override
-//            protected void prepareConnection(HttpURLConnection connection, String httpMethod) throws IOException {
-//                super.prepareConnection(connection, httpMethod);
-//                connection.setInstanceFollowRedirects(false);
-//            }
-//        };
         CloseableHttpClient client = HttpClientBuilder.create().disableRedirectHandling().build();
         ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(client);
         return new RestTemplate(requestFactory);

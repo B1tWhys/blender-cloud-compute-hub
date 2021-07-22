@@ -12,13 +12,6 @@ public class DateTimeConfig {
     @Bean
     DateTimeFormatter dateTimeFormatter() {
         return ISODateTimeFormat.basicDateTime(); // FIXME
-//        return new DateTimeFormatterBuilder()
-//                .appendClockhourOfDay(1)
-//                .appendLiteral(':')
-//                .appendMinuteOfHour(1)
-//                .appendLiteral(':')
-//                .appendSecondOfMinute(1)
-//                .appendLiteral('')
     }
 
     @Bean
