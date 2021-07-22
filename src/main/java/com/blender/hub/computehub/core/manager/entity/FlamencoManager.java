@@ -11,4 +11,9 @@ import lombok.experimental.SuperBuilder;
 public class FlamencoManager extends Manager {
     private Hostname hostname;
     private HmacSecret hmacSecret;
+
+    @Override
+    public ManagerType getManagerType() {
+        return ManagerType.FLAMENCO;
+    }
 }

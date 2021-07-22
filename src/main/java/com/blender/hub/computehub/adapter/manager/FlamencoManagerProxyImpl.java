@@ -19,7 +19,7 @@ import java.util.Optional;
 
 @AllArgsConstructor
 @Slf4j
-public class ManagerProxyImpl implements ManagerProxy {
+public class FlamencoManagerProxyImpl implements ManagerProxy {
     private static final String LINK_START_PATH = "/setup/api/link-start";
 
     private final RestTemplate restTemplate;
@@ -47,9 +47,8 @@ public class ManagerProxyImpl implements ManagerProxy {
 
         log.debug("hmac redirect: {}", redirect);
 
-        String hmacId = UriComponentsBuilder.fromUri(redirect).build().getQueryParams().getFirst("identifier");
         // TODO: verify hmac value also passed in request
-        return hmacId;
+        return UriComponentsBuilder.fromUri(redirect).build().getQueryParams().getFirst("identifier");
     }
 
     private URI getHmacExchangeUrl() {

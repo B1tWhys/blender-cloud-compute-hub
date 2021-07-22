@@ -12,6 +12,6 @@ public class ManagerProxyFactoryImpl implements ManagerProxyFactory {
 
     @Override
     public ManagerProxy buildManagerProxy(FlamencoManager manager) {
-        return new ManagerProxyImpl(noRedirectRestTemplate, manager.getHostname());
+        return new FlamencoManagerProxyImpl(noRedirectRestTemplate, manager.getHostname());
     }
 }

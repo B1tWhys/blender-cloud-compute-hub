@@ -9,4 +9,6 @@ public abstract class Manager {
     protected final String id;
     protected ManagerState state;
     protected final long createdTs;
+
+    public abstract ManagerType getManagerType();
 }

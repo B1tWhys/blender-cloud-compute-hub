@@ -48,7 +48,7 @@ class FlamencoManagerProxyImplTest {
                 .hostname(MANAGER_HOSTNAME)
                 .port(MANAGER_PORT)
                 .build();
-        managerProxy = new ManagerProxyImpl(restTemplate, hostname);
+        managerProxy = new FlamencoManagerProxyImpl(restTemplate, hostname);
         when(restTemplate.getForEntity(any(), any())).thenReturn(responseEntity);
         when(responseEntity.getBody()).thenReturn(new ManagerLinkStartResponse("http://localhost:8080/somepath"));
     }
