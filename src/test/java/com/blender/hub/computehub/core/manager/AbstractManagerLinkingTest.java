@@ -64,31 +64,6 @@ public abstract class AbstractManagerLinkingTest {
     @Mock
     protected TimeProvider timeProvider;
 
-    @BeforeEach
-    void setUp() {
-        setupUseCases();
-        setupMockAdapters();
-    }
-
-    private void setupMockAdapters() {
-        when(hmacIdGenerator.generate()).thenReturn(SECRET_ID);
-        when(timeProvider.now()).thenReturn(NOW_TS);
-        when(managerInfraProxy.createInfraFor(any(Manager.class)))
-                .thenReturn(Hostname.builder().scheme("http").hostname(MANAGER_HOSTNAME).port(1234).build());
-        when(managerIdGenerator.generate()).thenReturn(MANAGER_ID);
-        when(proxyFactory.buildManagerProxy(any(Manager.class))).thenReturn(managerProxy);
-        when(managerProxy.exchangeHmacSecret()).thenAnswer(i ->
-                createHmacSecret.newHmacSecret(SECRET_VALUE).getId());
-        when(hmacSecretRepository.getHmacSecret(SECRET_ID)).thenReturn(HmacSecret.builder()
-                .id(SECRET_ID)
-                .value(SECRET_VALUE).build());
-    }
-
-    private void setupUseCases() {
-        linkManager = new LinkManagerImpl(proxyFactory, managerRepository, hmacSecretRepository);
-        createHmacSecret = new CreateHmacSecret(hmacIdGenerator, hmacSecretRepository);
-        createManager = new CreateManagerImpl(managerIdGenerator, managerRepository, managerInfraProxy, linkManager, timeProvider);
-    }
 
     protected Manager buildUnlinkedManager() {
         return Manager.builder()

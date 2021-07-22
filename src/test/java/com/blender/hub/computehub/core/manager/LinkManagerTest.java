@@ -1,7 +1,11 @@
 package com.blender.hub.computehub.core.manager;
 
 import com.blender.hub.computehub.core.hmac.entity.HmacSecret;
+import com.blender.hub.computehub.core.hmac.usecase.CreateHmacSecret;
+import com.blender.hub.computehub.core.manager.entity.Hostname;
 import com.blender.hub.computehub.core.manager.entity.Manager;
+import com.blender.hub.computehub.core.manager.usecase.CreateManagerImpl;
+import com.blender.hub.computehub.core.manager.usecase.LinkManagerImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,16 +17,32 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension.class)
 public class LinkManagerTest extends AbstractManagerLinkingTest {
-    @Override
     @BeforeEach
     void setUp() {
-        super.setUp();
         manager = buildUnlinkedManager();
+        setupMockAdapters();
+        initUseCase();
+    }
+
+    protected void setupMockAdapters() {
+        when(hmacIdGenerator.generate()).thenReturn(SECRET_ID);
+        when(proxyFactory.buildManagerProxy(any(Manager.class))).thenReturn(managerProxy);
+        when(managerProxy.exchangeHmacSecret()).thenAnswer(i ->
+                createHmacSecret.newHmacSecret(SECRET_VALUE).getId());
+        when(hmacSecretRepository.getHmacSecret(SECRET_ID)).thenReturn(HmacSecret.builder()
+                .id(SECRET_ID)
+                .value(SECRET_VALUE).build());
+    }
+
+    protected void initUseCase() {
+        linkManager = new LinkManagerImpl(proxyFactory, managerRepository, hmacSecretRepository);
+        createHmacSecret = new CreateHmacSecret(hmacIdGenerator, hmacSecretRepository);
+        createManager = new CreateManagerImpl(managerIdGenerator, managerRepository, managerInfraProxy, linkManager, timeProvider);
     }
 
     @Test

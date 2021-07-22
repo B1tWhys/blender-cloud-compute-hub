@@ -1,8 +1,14 @@
 package com.blender.hub.computehub.core.manager;
 
+import com.blender.hub.computehub.core.hmac.entity.HmacSecret;
+import com.blender.hub.computehub.core.hmac.usecase.CreateHmacSecret;
 import com.blender.hub.computehub.core.manager.entity.CreateManagerCommand;
+import com.blender.hub.computehub.core.manager.entity.Hostname;
 import com.blender.hub.computehub.core.manager.entity.Manager;
 import com.blender.hub.computehub.core.manager.entity.ManagerState;
+import com.blender.hub.computehub.core.manager.usecase.CreateManagerImpl;
+import com.blender.hub.computehub.core.manager.usecase.LinkManagerImpl;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
@@ -10,11 +16,39 @@ import org.mockito.Mockito;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class CreateManagerTest extends AbstractManagerLinkingTest {
     @Captor
     ArgumentCaptor<Manager> managerArgumentCaptor;
+
+    @BeforeEach
+    void setUp() {
+        setupMockAdapters();
+        initUseCase();
+    }
+
+    protected void setupMockAdapters() {
+        when(hmacIdGenerator.generate()).thenReturn(SECRET_ID);
+        when(timeProvider.now()).thenReturn(NOW_TS);
+        when(managerInfraProxy.createInfraFor(any(Manager.class)))
+                .thenReturn(Hostname.builder().scheme("http").hostname(MANAGER_HOSTNAME).port(1234).build());
+        when(managerIdGenerator.generate()).thenReturn(MANAGER_ID);
+        when(proxyFactory.buildManagerProxy(any(Manager.class))).thenReturn(managerProxy);
+        when(managerProxy.exchangeHmacSecret()).thenAnswer(i ->
+                createHmacSecret.newHmacSecret(SECRET_VALUE).getId());
+        when(hmacSecretRepository.getHmacSecret(SECRET_ID)).thenReturn(HmacSecret.builder()
+                .id(SECRET_ID)
+                .value(SECRET_VALUE).build());
+    }
+
+    protected void initUseCase() {
+        linkManager = new LinkManagerImpl(proxyFactory, managerRepository, hmacSecretRepository);
+        createHmacSecret = new CreateHmacSecret(hmacIdGenerator, hmacSecretRepository);
+        createManager = new CreateManagerImpl(managerIdGenerator, managerRepository, managerInfraProxy, linkManager, timeProvider);
+    }
 
     @Test
     void testCreateManager() {
