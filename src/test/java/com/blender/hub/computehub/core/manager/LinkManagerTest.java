@@ -2,16 +2,13 @@ package com.blender.hub.computehub.core.manager;
 
 import com.blender.hub.computehub.core.hmac.entity.HmacSecret;
 import com.blender.hub.computehub.core.hmac.usecase.CreateHmacSecret;
-import com.blender.hub.computehub.core.manager.entity.Hostname;
 import com.blender.hub.computehub.core.manager.entity.Manager;
 import com.blender.hub.computehub.core.manager.usecase.CreateManagerImpl;
 import com.blender.hub.computehub.core.manager.usecase.LinkManagerImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,7 +16,6 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.when;
 
 public class LinkManagerTest extends AbstractManagerLinkingTest {
     @BeforeEach

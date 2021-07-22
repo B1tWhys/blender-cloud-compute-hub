@@ -1,10 +1,10 @@
 package com.blender.hub.computehub.application.config;
 
 import com.blender.hub.computehub.adapter.hmac.HmacSecretIdGeneratorImpl;
-import com.blender.hub.computehub.adapter.persistance.InMemoryManagerRepoImpl;
 import com.blender.hub.computehub.adapter.manager.LocalDockerManagerInfraProxyImpl;
 import com.blender.hub.computehub.adapter.manager.ManagerIdGeneratorImpl;
 import com.blender.hub.computehub.adapter.manager.ManagerProxyFactoryImpl;
+import com.blender.hub.computehub.adapter.persistance.InMemoryManagerRepoImpl;
 import com.blender.hub.computehub.core.hmac.port.driven.HmacSecretIdGenerator;
 import com.blender.hub.computehub.core.hmac.port.driven.HmacSecretRepository;
 import com.blender.hub.computehub.core.hmac.usecase.CreateHmacSecret;
