@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -30,7 +31,14 @@ public class ManagerProxyImpl implements ManagerProxy {
         URI startLinkingUri = getHmacExchangeUrl();
         log.debug("hmac secret exchange request to hostname: {} full uri: {}", managerHostname, startLinkingUri.toASCIIString());
 
-        ResponseEntity<Object> redirectResponse = restTemplate.getForEntity(startLinkingUri, Object.class);
+        ResponseEntity<Object> redirectResponse = null;
+        try {
+            redirectResponse = restTemplate.getForEntity(startLinkingUri, Object.class);
+        } catch (RestClientException e) {
+            log.warn("Error on start-link request: {}", startLinkingUri.toASCIIString(), e);
+            throw e;
+        }
+
         if (!redirectResponse.getStatusCode().is3xxRedirection()) {
             log.warn("Got a non-redirect response when attempting to exchange the HMAC key");
             // TODO: throw an exception & fail the initialization sequence

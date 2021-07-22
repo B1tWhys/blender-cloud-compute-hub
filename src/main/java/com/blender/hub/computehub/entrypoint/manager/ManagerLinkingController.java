@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @AllArgsConstructor
 @Slf4j
 @RequestMapping("api/flamenco/managers")
-public class ManagerController {
+public class ManagerLinkingController {
     ManagerLinkingProvider managerLinkingProvider;
 
     @PostMapping("/link/exchange")
