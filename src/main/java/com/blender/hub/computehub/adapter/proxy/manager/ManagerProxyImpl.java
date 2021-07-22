@@ -1,6 +1,7 @@
 package com.blender.hub.computehub.adapter.proxy.manager;
 
 import com.blender.hub.computehub.core.manager.entity.Hostname;
+import com.blender.hub.computehub.core.manager.entity.LinkingException;
 import com.blender.hub.computehub.core.manager.port.adapter.ManagerProxy;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,12 +12,13 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
-import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 
 @AllArgsConstructor
 @Slf4j
@@ -31,24 +33,21 @@ public class ManagerProxyImpl implements ManagerProxy {
         URI startLinkingUri = getHmacExchangeUrl();
         log.debug("hmac secret exchange request to hostname: {} full uri: {}", managerHostname, startLinkingUri.toASCIIString());
 
-        ResponseEntity<Object> redirectResponse = null;
+        ResponseEntity<ManagerLinkStartResponse> redirectResponse = null;
         try {
-            redirectResponse = restTemplate.getForEntity(startLinkingUri, Object.class);
+            redirectResponse = restTemplate.getForEntity(startLinkingUri, ManagerLinkStartResponse.class);
         } catch (RestClientException e) {
-            log.warn("Error on start-link request: {}", startLinkingUri.toASCIIString(), e);
-            throw e;
-        }
-
-        if (!redirectResponse.getStatusCode().is3xxRedirection()) {
-            log.warn("Got a non-redirect response when attempting to exchange the HMAC key");
-            // TODO: throw an exception & fail the initialization sequence
-            return null;
+            throw new LinkingException("Error on start-link request: " + startLinkingUri.toASCIIString(), e);
         }
 
         URI redirect = Optional.of(redirectResponse)
-                .map(HttpEntity::getHeaders)
-                .map(HttpHeaders::getLocation)
+                .map(ResponseEntity::getBody)
+                .map(ManagerLinkStartResponse::getLocation)
+                .map(UriComponentsBuilder::fromUriString)
+                .map(UriComponentsBuilder::build)
+                .map(UriComponents::toUri)
                 .orElseThrow();
+
         log.debug("hmac redirect: {}", redirect);
 
         String hmacId = UriComponentsBuilder.fromUri(redirect).build().getQueryParams().getFirst("identifier");

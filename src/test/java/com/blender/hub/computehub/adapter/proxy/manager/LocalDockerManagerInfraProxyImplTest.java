@@ -84,7 +84,6 @@ class LocalDockerManagerInfraProxyImplTest {
         Map<ExposedPort, Ports.Binding[]> bindings = hostConfigArgCaptor.getValue().getPortBindings().getBindings();
         String actualBinding = bindings.get(ExposedPort.tcp(FLAMENCO_PORT))[0].toString();
         assertEquals("0", actualBinding);
-        assertEquals("host", hostConfigArgCaptor.getValue().getNetworkMode());
     }
 
     @Test
