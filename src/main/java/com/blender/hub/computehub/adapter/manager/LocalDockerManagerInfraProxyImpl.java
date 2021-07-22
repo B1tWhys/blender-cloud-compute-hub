@@ -1,6 +1,6 @@
 package com.blender.hub.computehub.adapter.manager;
 
-import com.blender.hub.computehub.application.services.ManagerDockerContainerProperties;
+import com.blender.hub.computehub.application.config.ManagerDockerContainerProperties;
 import com.blender.hub.computehub.core.manager.entity.Hostname;
 import com.blender.hub.computehub.core.manager.entity.Manager;
 import com.blender.hub.computehub.core.manager.port.driven.ManagerInfraProxy;

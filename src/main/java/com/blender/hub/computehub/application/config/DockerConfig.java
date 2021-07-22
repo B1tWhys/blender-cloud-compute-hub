@@ -1,4 +1,4 @@
-package com.blender.hub.computehub.application.services;
+package com.blender.hub.computehub.application.config;
 
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.core.DefaultDockerClientConfig;

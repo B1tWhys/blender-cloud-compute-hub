@@ -12,7 +12,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.verify;
 
 public class CreateManagerTest extends AbstractManagerLinkingTest {
-    private static final long CURRENT_TS = 5000L;
     @Captor
     ArgumentCaptor<Manager> managerArgumentCaptor;
 
@@ -33,10 +32,8 @@ public class CreateManagerTest extends AbstractManagerLinkingTest {
     @Test
     void testCreateManagerWithCurrentDate() {
         createManager();
-        assertEquals(CURRENT_TS, manager.getCreatedTs());
-//        assertNotNull(manager.getCreatedTs());
-//        Period diff = new Period(new DateTime(), manager.getCreatedTs(), PeriodType.millis());
-//        assertEquals(diff.getMillis(), 0, 30);
+
+        assertEquals(NOW_TS, manager.getCreatedTs());
     }
 //
 //    @Test

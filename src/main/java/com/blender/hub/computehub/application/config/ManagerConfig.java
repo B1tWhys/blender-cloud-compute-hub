@@ -1,4 +1,4 @@
-package com.blender.hub.computehub.application.services;
+package com.blender.hub.computehub.application.config;
 
 import com.blender.hub.computehub.adapter.hmac.HmacSecretIdGeneratorImpl;
 import com.blender.hub.computehub.adapter.persistance.InMemoryManagerRepoImpl;
@@ -16,10 +16,12 @@ import com.blender.hub.computehub.core.manager.port.driving.CreateManager;
 import com.blender.hub.computehub.core.manager.port.driving.LinkManager;
 import com.blender.hub.computehub.core.manager.usecase.CreateManagerImpl;
 import com.blender.hub.computehub.core.manager.usecase.LinkManagerImpl;
+import com.blender.hub.computehub.core.util.TimeProvider;
 import com.blender.hub.computehub.entrypoint.admin.managers.provider.AdminManagerProvider;
 import com.blender.hub.computehub.entrypoint.admin.managers.provider.AdminManagerProviderImpl;
 import com.blender.hub.computehub.entrypoint.admin.managers.provider.MockAdminManagerProviderImpl;
 import com.github.dockerjava.api.DockerClient;
+import org.joda.time.format.DateTimeFormatter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -36,8 +38,10 @@ public class ManagerConfig {
 
     @Bean(name = "adminManagerProvider")
     @ConditionalOnProperty(value = "mock.adminManagerProvider", havingValue = "false", matchIfMissing = true)
-    AdminManagerProvider realAdminManagerProvider(ManagerRepo managerRepo, CreateManager createManagerUseCase) {
-        return new AdminManagerProviderImpl(managerRepo, createManagerUseCase);
+    AdminManagerProvider realAdminManagerProvider(ManagerRepo managerRepo,
+                                                  CreateManager createManagerUseCase,
+                                                  DateTimeFormatter dateTimeFormatter) {
+        return new AdminManagerProviderImpl(managerRepo, createManagerUseCase, dateTimeFormatter);
     }
 
     @Bean
@@ -47,8 +51,11 @@ public class ManagerConfig {
     }
 
     @Bean
-    public CreateManager createManagerUseCase(ManagerRepo managerRepo, ManagerInfraProxy managerInfraProxy, LinkManager linkManager) {
-        return new CreateManagerImpl(managerIdGenerator(), managerRepo, managerInfraProxy, linkManager);
+    public CreateManager createManagerUseCase(ManagerRepo managerRepo,
+                                              ManagerInfraProxy managerInfraProxy,
+                                              LinkManager linkManager,
+                                              TimeProvider timeProvider) {
+        return new CreateManagerImpl(managerIdGenerator(), managerRepo, managerInfraProxy, linkManager, timeProvider);
     }
 
     @Bean
