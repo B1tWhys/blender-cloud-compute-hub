@@ -2,6 +2,7 @@ package com.blender.hub.computehub.core.manager;
 
 import com.blender.hub.computehub.core.manager.entity.CreateManagerCommand;
 import com.blender.hub.computehub.core.manager.entity.Manager;
+import com.blender.hub.computehub.core.manager.entity.ManagerState;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
@@ -35,19 +36,19 @@ public class CreateManagerTest extends AbstractManagerLinkingTest {
 
         assertEquals(NOW_TS, manager.getCreatedTs());
     }
-//
-//    @Test
-//    void testCreateManagerWithState() {
-//        createManager();
-//        assertNotNull(manager.getState());
-//        assertEquals(manager.getState(), ManagerState.NEW);
-//    }
-//
-//    @Test
-//    void testManagerPersisted() {
-//        createManager();
-//        assertNotNull(managerRepository.get(manager.getId()));
-//    }
+
+    @Test
+    void testCreateManagerWithState() {
+        createManager();
+        assertNotNull(manager.getState());
+        assertEquals(manager.getState(), ManagerState.NEW);
+    }
+
+    @Test
+    void testManagerPersisted() {
+        createManager();
+        assertEquals(managerArgumentCaptor.getValue(), manager);
+    }
 //
 //    @Test
 //    void testManagerInfraCreated() {
