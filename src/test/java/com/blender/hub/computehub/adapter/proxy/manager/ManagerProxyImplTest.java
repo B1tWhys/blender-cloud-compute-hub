@@ -54,12 +54,7 @@ class ManagerProxyImplTest {
                 .build();
         managerProxy = new ManagerProxyImpl(restTemplate, hostname);
         when(restTemplate.getForEntity(any(), any())).thenReturn(responseEntity);
-        when(responseEntity.getStatusCode()).thenReturn(HttpStatus.PERMANENT_REDIRECT);
-        when(responseEntity.getHeaders()).thenReturn(HttpHeaders.readOnlyHttpHeaders(
-                new MultiValueMapAdapter<>(Collections.singletonMap(
-                        "Location", Collections.singletonList("http://localhost:8080/somepath")
-                ))
-        ));
+        when(responseEntity.getBody()).thenReturn(new ManagerLinkStartResponse("http://localhost:8080/somepath"));
     }
 
     @Test
