@@ -49,16 +49,16 @@ public class CreateManagerTest extends AbstractManagerLinkingTest {
         createManager();
         assertEquals(managerArgumentCaptor.getValue(), manager);
     }
-//
-//    @Test
-//    void testManagerInfraCreated() {
-//        createManager();
-//        Mockito.verify(managerInfraProxy, Mockito.times(1))
-//                .createInfraFor(Mockito.any(Manager.class));
-//        assertEquals(MANAGER_HOSTNAME, manager.getHostname().getHostname(), "manager hostname must match infrastructure");
-//    }
-//
-//    @Test
+
+    @Test
+    void testManagerInfraCreated() {
+        createManager();
+        Mockito.verify(managerInfraProxy, Mockito.times(1))
+                .createInfraFor(Mockito.any(Manager.class));
+        assertEquals(MANAGER_HOSTNAME, manager.getHostname().getHostname(), "manager hostname must match infrastructure");
+    }
+
+//    @Test // TODO: redo this when linking is triggered by event
 //    void managerIsLinked() {
 //        createManager();
 //        Mockito.verify(linkManager, Mockito.times(1))
