@@ -1,10 +1,10 @@
 package com.blender.hub.computehub.core.manager;
 
 import com.blender.hub.computehub.core.hmac.entity.HmacSecret;
-import com.blender.hub.computehub.core.hmac.usecase.CreateHmacSecret;
+import com.blender.hub.computehub.core.hmac.usecase.CreateHmacSecretImpl;
 import com.blender.hub.computehub.core.manager.entity.CreateManagerCommand;
 import com.blender.hub.computehub.core.manager.entity.Hostname;
-import com.blender.hub.computehub.core.manager.entity.Manager;
+import com.blender.hub.computehub.core.manager.entity.FlamencoManager;
 import com.blender.hub.computehub.core.manager.entity.ManagerState;
 import com.blender.hub.computehub.core.manager.usecase.CreateManagerImpl;
 import com.blender.hub.computehub.core.manager.usecase.LinkManagerImpl;
@@ -20,9 +20,9 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class CreateManagerTest extends AbstractManagerLinkingTest {
+public class CreateFlamencoManagerTest extends AbstractManagerLinkingTest {
     @Captor
-    ArgumentCaptor<Manager> managerArgumentCaptor;
+    ArgumentCaptor<FlamencoManager> managerArgumentCaptor;
 
     @BeforeEach
     void setUp() {
@@ -33,12 +33,12 @@ public class CreateManagerTest extends AbstractManagerLinkingTest {
     protected void setupMockAdapters() {
         when(hmacIdGenerator.generate()).thenReturn(SECRET_ID);
         when(timeProvider.now()).thenReturn(NOW_TS);
-        when(managerInfraProxy.createInfraFor(any(Manager.class)))
+        when(managerInfraProxy.createInfraFor(any(FlamencoManager.class)))
                 .thenReturn(Hostname.builder().scheme("http").hostname(MANAGER_HOSTNAME).port(1234).build());
         when(managerIdGenerator.generate()).thenReturn(MANAGER_ID);
-        when(proxyFactory.buildManagerProxy(any(Manager.class))).thenReturn(managerProxy);
+        when(proxyFactory.buildManagerProxy(any(FlamencoManager.class))).thenReturn(managerProxy);
         when(managerProxy.exchangeHmacSecret()).thenAnswer(i ->
-                createHmacSecret.newHmacSecret(SECRET_VALUE).getId());
+                createHmacSecret.newLinkTimeHmacSecret(SECRET_VALUE).getId());
         when(hmacSecretRepository.getHmacSecret(SECRET_ID)).thenReturn(HmacSecret.builder()
                 .id(SECRET_ID)
                 .value(SECRET_VALUE).build());
@@ -46,7 +46,7 @@ public class CreateManagerTest extends AbstractManagerLinkingTest {
 
     protected void initUseCase() {
         linkManager = new LinkManagerImpl(proxyFactory, managerRepository, hmacSecretRepository);
-        createHmacSecret = new CreateHmacSecret(hmacIdGenerator, hmacSecretRepository);
+        createHmacSecret = new CreateHmacSecretImpl(hmacIdGenerator, hmacSecretRepository);
         createManager = new CreateManagerImpl(managerIdGenerator, managerRepository, managerInfraProxy, linkManager, timeProvider);
     }
 
@@ -88,7 +88,7 @@ public class CreateManagerTest extends AbstractManagerLinkingTest {
     void testManagerInfraCreated() {
         createManager();
         Mockito.verify(managerInfraProxy, Mockito.times(1))
-                .createInfraFor(Mockito.any(Manager.class));
+                .createInfraFor(Mockito.any(FlamencoManager.class));
         assertEquals(MANAGER_HOSTNAME, manager.getHostname().getHostname(), "manager hostname must match infrastructure");
     }
 

@@ -2,8 +2,8 @@ package com.blender.hub.computehub.core.manager.port.driving;
 
 
 import com.blender.hub.computehub.core.manager.entity.CreateManagerCommand;
-import com.blender.hub.computehub.core.manager.entity.Manager;
+import com.blender.hub.computehub.core.manager.entity.FlamencoManager;
 
 public interface CreateManager {
-    Manager createManager(CreateManagerCommand createManagerCommand);
+    FlamencoManager createManager(CreateManagerCommand createManagerCommand);
 }

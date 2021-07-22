@@ -1,23 +1,12 @@
 package com.blender.hub.computehub.core.manager.entity;
 
-import com.blender.hub.computehub.core.hmac.entity.HmacSecret;
-import lombok.Builder;
 import lombok.Data;
+import lombok.experimental.SuperBuilder;
 
-@Builder(toBuilder = true)
+@SuperBuilder
 @Data
-public class Manager {
-    private final String id;
-    private Hostname hostname;
-    private HmacSecret hmacSecret;
-    private ManagerState state;
-    private final long createdTs;
-
-    public ManagerState getState() {
-        return state;
-    }
-
-    public void setState(ManagerState state) {
-        this.state = state;
-    }
+public abstract class Manager {
+    protected final String id;
+    protected ManagerState state;
+    protected final long createdTs;
 }

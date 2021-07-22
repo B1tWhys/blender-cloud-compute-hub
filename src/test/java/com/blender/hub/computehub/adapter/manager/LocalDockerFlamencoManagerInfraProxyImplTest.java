@@ -2,7 +2,7 @@ package com.blender.hub.computehub.adapter.manager;
 
 import com.blender.hub.computehub.application.config.ManagerDockerContainerProperties;
 import com.blender.hub.computehub.core.manager.entity.Hostname;
-import com.blender.hub.computehub.core.manager.entity.Manager;
+import com.blender.hub.computehub.core.manager.entity.FlamencoManager;
 import com.blender.hub.computehub.core.manager.port.driven.ManagerInfraProxy;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.*;
@@ -24,7 +24,7 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @Slf4j
-class LocalDockerManagerInfraProxyImplTest {
+class LocalDockerFlamencoManagerInfraProxyImplTest {
     private static final String IMAGE_NAME = "flamencoManager:1";
     private static final int FLAMENCO_PORT = 8000;
     private static final String CONTAINER_ID = "container-id";
@@ -39,12 +39,12 @@ class LocalDockerManagerInfraProxyImplTest {
     @Mock(answer = Answers.RETURNS_SELF)
     InspectContainerCmd inspectContainerCmd;
 
-    Manager manager;
+    FlamencoManager manager;
     ManagerInfraProxy infraProxy;
 
     @BeforeEach
     void setUp() {
-        manager = Manager.builder().id(UUID.randomUUID().toString()).build();
+        manager = FlamencoManager.builder().id(UUID.randomUUID().toString()).build();
 
         // infraProxy setup
         ManagerDockerContainerProperties config = new ManagerDockerContainerProperties();

@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
-class ManagerIdGeneratorImplTest {
+class FlamencoManagerIdGeneratorImplTest {
 
     @Test
     void generateIsUnique() {

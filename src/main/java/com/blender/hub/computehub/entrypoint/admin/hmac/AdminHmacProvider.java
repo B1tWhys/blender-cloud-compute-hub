@@ -2,7 +2,7 @@ package com.blender.hub.computehub.entrypoint.admin.hmac;
 
 import com.blender.hub.computehub.core.hmac.entity.HmacSecret;
 import com.blender.hub.computehub.core.hmac.port.driven.HmacSecretRepository;
-import com.blender.hub.computehub.core.manager.entity.Manager;
+import com.blender.hub.computehub.core.manager.entity.FlamencoManager;
 import com.blender.hub.computehub.core.manager.port.driven.ManagerRepo;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,7 +24,7 @@ class AdminHmacProvider {
                         .value(hs.getValue())
                         .managerId(managerRepo
                                 .getByHmacId(hs.getId())
-                                .map(Manager::getId)
+                                .map(FlamencoManager::getId)
                                 .orElse("unlinked"))
                         .build())
                 .collect(Collectors.toList());

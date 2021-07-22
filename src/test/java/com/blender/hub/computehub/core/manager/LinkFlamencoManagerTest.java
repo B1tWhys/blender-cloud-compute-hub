@@ -1,8 +1,8 @@
 package com.blender.hub.computehub.core.manager;
 
 import com.blender.hub.computehub.core.hmac.entity.HmacSecret;
-import com.blender.hub.computehub.core.hmac.usecase.CreateHmacSecret;
-import com.blender.hub.computehub.core.manager.entity.Manager;
+import com.blender.hub.computehub.core.hmac.usecase.CreateHmacSecretImpl;
+import com.blender.hub.computehub.core.manager.entity.FlamencoManager;
 import com.blender.hub.computehub.core.manager.usecase.CreateManagerImpl;
 import com.blender.hub.computehub.core.manager.usecase.LinkManagerImpl;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-public class LinkManagerTest extends AbstractManagerLinkingTest {
+public class LinkFlamencoManagerTest extends AbstractManagerLinkingTest {
     @BeforeEach
     void setUp() {
         manager = buildUnlinkedManager();
@@ -27,9 +27,9 @@ public class LinkManagerTest extends AbstractManagerLinkingTest {
 
     protected void setupMockAdapters() {
         when(hmacIdGenerator.generate()).thenReturn(SECRET_ID);
-        when(proxyFactory.buildManagerProxy(any(Manager.class))).thenReturn(managerProxy);
+        when(proxyFactory.buildManagerProxy(any(FlamencoManager.class))).thenReturn(managerProxy);
         when(managerProxy.exchangeHmacSecret()).thenAnswer(i ->
-                createHmacSecret.newHmacSecret(SECRET_VALUE).getId());
+                createHmacSecret.newLinkTimeHmacSecret(SECRET_VALUE).getId());
         when(hmacSecretRepository.getHmacSecret(SECRET_ID)).thenReturn(HmacSecret.builder()
                 .id(SECRET_ID)
                 .value(SECRET_VALUE).build());
@@ -37,7 +37,7 @@ public class LinkManagerTest extends AbstractManagerLinkingTest {
 
     protected void initUseCase() {
         linkManager = new LinkManagerImpl(proxyFactory, managerRepository, hmacSecretRepository);
-        createHmacSecret = new CreateHmacSecret(hmacIdGenerator, hmacSecretRepository);
+        createHmacSecret = new CreateHmacSecretImpl(hmacIdGenerator, hmacSecretRepository);
         createManager = new CreateManagerImpl(managerIdGenerator, managerRepository, managerInfraProxy, linkManager, timeProvider);
     }
 
@@ -64,12 +64,12 @@ public class LinkManagerTest extends AbstractManagerLinkingTest {
     @Test
     void keyIsAssociatedWithManager() {
         linkManager.link(manager);
-        ArgumentCaptor<Manager> managerCaptor = ArgumentCaptor.forClass(Manager.class);
+        ArgumentCaptor<FlamencoManager> managerCaptor = ArgumentCaptor.forClass(FlamencoManager.class);
         verify(managerRepository, Mockito.atLeast(1)).upsert(managerCaptor.capture());
 
-        List<Manager> managerVersions = managerCaptor.getAllValues();
+        List<FlamencoManager> managerVersions = managerCaptor.getAllValues();
         assertEquals(SECRET_ID, Optional.of(managerVersions.get(managerVersions.size()-1))
-                .map(Manager::getHmacSecret)
+                .map(FlamencoManager::getHmacSecret)
                 .map(HmacSecret::getId)
                 .orElseThrow());
     }

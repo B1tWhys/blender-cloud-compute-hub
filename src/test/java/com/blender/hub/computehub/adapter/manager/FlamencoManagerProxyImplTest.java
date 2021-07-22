@@ -20,7 +20,7 @@ import java.net.URI;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class ManagerProxyImplTest {
+class FlamencoManagerProxyImplTest {
     public static final String MANAGER_HOSTNAME = "localhost";
     public static final int MANAGER_PORT = 1234;
     public static final String MANAGER_SCHEME = "https";

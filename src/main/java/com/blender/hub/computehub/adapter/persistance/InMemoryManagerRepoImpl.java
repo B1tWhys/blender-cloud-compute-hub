@@ -1,7 +1,7 @@
 package com.blender.hub.computehub.adapter.persistance;
 
 import com.blender.hub.computehub.core.hmac.entity.HmacSecret;
-import com.blender.hub.computehub.core.manager.entity.Manager;
+import com.blender.hub.computehub.core.manager.entity.FlamencoManager;
 import com.blender.hub.computehub.core.manager.port.driven.ManagerRepo;
 import lombok.extern.slf4j.Slf4j;
 
@@ -15,18 +15,18 @@ import java.util.stream.Collectors;
 
 @Slf4j
 public class InMemoryManagerRepoImpl implements ManagerRepo {
-    private final static ConcurrentMap<String, Manager> managerMap = new ConcurrentHashMap<>();
+    private final static ConcurrentMap<String, FlamencoManager> managerMap = new ConcurrentHashMap<>();
 
     @Override
-    public Optional<Manager> get(String id) {
+    public Optional<FlamencoManager> get(String id) {
         return Optional.ofNullable(managerMap.get(id));
     }
 
     @Override
-    public Optional<Manager> getByHmacId(String hmacId) {
+    public Optional<FlamencoManager> getByHmacId(String hmacId) {
         return managerMap.values().stream()
                 .filter(m -> Optional.of(m)
-                        .map(Manager::getHmacSecret)
+                        .map(FlamencoManager::getHmacSecret)
                         .map(HmacSecret::getId)
                         .map(i -> i.equals(hmacId))
                         .orElse(false))
@@ -34,7 +34,7 @@ public class InMemoryManagerRepoImpl implements ManagerRepo {
     }
 
     @Override
-    public List<Manager> getMostRecentlyCreated(int limit) {
+    public List<FlamencoManager> getMostRecentlyCreated(int limit) {
         return managerMap.entrySet().stream().
                 sorted(Comparator.comparing(e -> e.getValue().getCreatedTs()))
                 .limit(limit)
@@ -43,7 +43,7 @@ public class InMemoryManagerRepoImpl implements ManagerRepo {
     }
 
     @Override
-    public void upsert(Manager manager) {
+    public void upsert(FlamencoManager manager) {
         managerMap.put(manager.getId(), manager);
     }
 }

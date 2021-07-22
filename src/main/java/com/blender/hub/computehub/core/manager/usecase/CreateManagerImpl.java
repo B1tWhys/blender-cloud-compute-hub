@@ -2,7 +2,7 @@ package com.blender.hub.computehub.core.manager.usecase;
 
 import com.blender.hub.computehub.core.manager.entity.CreateManagerCommand;
 import com.blender.hub.computehub.core.manager.entity.Hostname;
-import com.blender.hub.computehub.core.manager.entity.Manager;
+import com.blender.hub.computehub.core.manager.entity.FlamencoManager;
 import com.blender.hub.computehub.core.manager.entity.ManagerState;
 import com.blender.hub.computehub.core.manager.port.driven.ManagerIdGenerator;
 import com.blender.hub.computehub.core.manager.port.driven.ManagerInfraProxy;
@@ -23,10 +23,10 @@ public class CreateManagerImpl implements CreateManager {
     private final TimeProvider timeProvider;
 
     @Override
-    public Manager createManager(CreateManagerCommand createManagerCommand) {
+    public FlamencoManager createManager(CreateManagerCommand createManagerCommand) {
         String id = idGenerator.generate();
         log.info("beginning manager creation with id: {}", id);
-        Manager manager = Manager.builder()
+        FlamencoManager manager = FlamencoManager.builder()
                 .id(id)
                 .createdTs(timeProvider.now())
                 .state(ManagerState.NEW)

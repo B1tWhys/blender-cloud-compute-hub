@@ -7,7 +7,7 @@ import com.blender.hub.computehub.adapter.manager.ManagerProxyFactoryImpl;
 import com.blender.hub.computehub.adapter.persistance.InMemoryManagerRepoImpl;
 import com.blender.hub.computehub.core.hmac.port.driven.HmacSecretIdGenerator;
 import com.blender.hub.computehub.core.hmac.port.driven.HmacSecretRepository;
-import com.blender.hub.computehub.core.hmac.usecase.CreateHmacSecret;
+import com.blender.hub.computehub.core.hmac.usecase.CreateHmacSecretImpl;
 import com.blender.hub.computehub.core.manager.port.driven.ManagerIdGenerator;
 import com.blender.hub.computehub.core.manager.port.driven.ManagerInfraProxy;
 import com.blender.hub.computehub.core.manager.port.driven.ManagerProxyFactory;
@@ -83,8 +83,8 @@ public class ManagerConfig {
     }
 
     @Bean
-    public CreateHmacSecret createHmacSecret(HmacSecretRepository hmacSecretRepository) {
-        return new CreateHmacSecret(secretIdGenerator(), hmacSecretRepository);
+    public CreateHmacSecretImpl createHmacSecret(HmacSecretRepository hmacSecretRepository) {
+        return new CreateHmacSecretImpl(secretIdGenerator(), hmacSecretRepository);
     }
 
     @Bean

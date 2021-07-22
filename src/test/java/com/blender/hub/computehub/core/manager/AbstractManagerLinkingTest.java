@@ -3,8 +3,8 @@ package com.blender.hub.computehub.core.manager;
 import com.blender.hub.computehub.adapter.manager.ManagerProxyFactoryImpl;
 import com.blender.hub.computehub.core.hmac.port.driven.HmacSecretIdGenerator;
 import com.blender.hub.computehub.core.hmac.port.driven.HmacSecretRepository;
-import com.blender.hub.computehub.core.hmac.usecase.CreateHmacSecret;
-import com.blender.hub.computehub.core.manager.entity.Manager;
+import com.blender.hub.computehub.core.hmac.usecase.CreateHmacSecretImpl;
+import com.blender.hub.computehub.core.manager.entity.FlamencoManager;
 import com.blender.hub.computehub.core.manager.port.driven.ManagerIdGenerator;
 import com.blender.hub.computehub.core.manager.port.driven.ManagerInfraProxy;
 import com.blender.hub.computehub.core.manager.port.driven.ManagerProxy;
@@ -28,9 +28,9 @@ public abstract class AbstractManagerLinkingTest {
 
     protected CreateManager createManager;
 
-    protected CreateHmacSecret createHmacSecret;
+    protected CreateHmacSecretImpl createHmacSecret;
 
-    protected Manager manager;
+    protected FlamencoManager manager;
 
     @Mock
     protected ManagerProxy managerProxy;
@@ -57,8 +57,8 @@ public abstract class AbstractManagerLinkingTest {
     protected TimeProvider timeProvider;
 
 
-    protected Manager buildUnlinkedManager() {
-        return Manager.builder()
+    protected FlamencoManager buildUnlinkedManager() {
+        return FlamencoManager.builder()
                 .id(MANAGER_ID)
                 .build();
     }

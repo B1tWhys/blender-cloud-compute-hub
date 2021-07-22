@@ -2,7 +2,7 @@ package com.blender.hub.computehub.adapter.manager;
 
 import com.blender.hub.computehub.application.config.ManagerDockerContainerProperties;
 import com.blender.hub.computehub.core.manager.entity.Hostname;
-import com.blender.hub.computehub.core.manager.entity.Manager;
+import com.blender.hub.computehub.core.manager.entity.FlamencoManager;
 import com.blender.hub.computehub.core.manager.port.driven.ManagerInfraProxy;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.CreateContainerCmd;
@@ -18,7 +18,7 @@ public class LocalDockerManagerInfraProxyImpl implements ManagerInfraProxy {
     private final ManagerDockerContainerProperties config;
 
     @Override
-    public Hostname createInfraFor(Manager manager) {
+    public Hostname createInfraFor(FlamencoManager manager) {
         String containerId = createManagerContainer(manager);
         log.info("Container id for manager {} is: {}", manager.getId(), containerId);
 
@@ -32,7 +32,7 @@ public class LocalDockerManagerInfraProxyImpl implements ManagerInfraProxy {
                 .build();
     }
 
-    private String createManagerContainer(Manager manager) {
+    private String createManagerContainer(FlamencoManager manager) {
         log.info("Creating docker container for manager id: {}", manager);
         PortBinding portBinding = PortBinding.parse("0:" + config.getApiPort() + "/tcp");
         CreateContainerCmd createContainerCmd = dockerClient.createContainerCmd(config.getImageName())

@@ -1,8 +1,8 @@
 package com.blender.hub.computehub.core.manager.port.driving;
 
 
-import com.blender.hub.computehub.core.manager.entity.Manager;
+import com.blender.hub.computehub.core.manager.entity.FlamencoManager;
 
 public interface LinkManager {
-    void link(Manager manager);
+    void link(FlamencoManager manager);
 }
