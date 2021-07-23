@@ -6,6 +6,11 @@
     <modules>
         <module>application</module>
         <module>adapter</module>
+        <module>entrypoint</module>
+        <module>port</module>
+        <module>core</module>
+        <module>entity</module>
+        <module>usecase</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>

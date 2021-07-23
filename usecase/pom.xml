@@ -9,18 +9,12 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>application</artifactId>
+    <artifactId>usecase</artifactId>
     <dependencies>
         <dependency>
             <groupId>com.blender.hub</groupId>
-            <artifactId>entrypoint</artifactId>
+            <artifactId>entity</artifactId>
             <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>com.blender.hub</groupId>
-            <artifactId>port</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-            <scope>compile</scope>
         </dependency>
     </dependencies>
 
