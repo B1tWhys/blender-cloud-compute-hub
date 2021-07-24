@@ -117,6 +117,11 @@
             <version>${docker-java.version}</version>
         </dependency>
         <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <version>4.4.0</version>
+        </dependency>
+        <dependency>
             <groupId>com.github.docker-java</groupId>
             <artifactId>docker-java-transport</artifactId>
             <version>${docker-java.version}</version>
