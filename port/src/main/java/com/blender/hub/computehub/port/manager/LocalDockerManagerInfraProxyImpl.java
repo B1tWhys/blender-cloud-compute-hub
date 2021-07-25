@@ -36,7 +36,8 @@ public class LocalDockerManagerInfraProxyImpl implements ManagerInfraProxy {
         PortBinding portBinding = PortBinding.parse("0:" + config.getApiPort() + "/tcp");
         CreateContainerCmd createContainerCmd = dockerClient.createContainerCmd(config.getImageName())
                 .withName(manager.getId())
-                .withHostConfig(new HostConfig().withPortBindings(portBinding))
+                .withHostConfig(new HostConfig().withPortBindings(portBinding)
+                        .withExtraHosts("localhost:host-gateway"))
                 .withExposedPorts(ExposedPort.tcp(config.getApiPort()));
         log.debug("Create container command: {}", createContainerCmd);
         CreateContainerResponse createResponse = createContainerCmd.exec();
