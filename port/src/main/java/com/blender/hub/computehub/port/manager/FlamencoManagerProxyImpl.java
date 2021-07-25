@@ -4,6 +4,7 @@ import com.blender.hub.computehub.entity.manager.Hostname;
 import com.blender.hub.computehub.entity.manager.LinkingException;
 import com.blender.hub.computehub.usecase.manager.port.driven.ManagerProxy;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestClientException;
@@ -17,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
 import java.util.Optional;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Slf4j
 public class FlamencoManagerProxyImpl implements ManagerProxy {
     private static final String LINK_START_PATH = "/setup/api/link-start";
@@ -85,10 +86,9 @@ public class FlamencoManagerProxyImpl implements ManagerProxy {
                 .map(UriComponentsBuilder::fromUriString)
                 .map(UriComponentsBuilder::build)
                 .map(UriComponents::toUri)
-                .orElseThrow(() -> new LinkingException("Error extracting redirect URI from hmac secret request"));
+                .orElseThrow(() -> new LinkingException("Error extracting redirect URI from hmac secret exchange response"));
         log.debug("hmac redirect: {}", redirect);
-        String keyId = UriComponentsBuilder.fromUri(redirect).build().getQueryParams().getFirst("identifier");
-        return keyId;
+        return UriComponentsBuilder.fromUri(redirect).build().getQueryParams().getFirst("identifier");
     }
 
     @Override

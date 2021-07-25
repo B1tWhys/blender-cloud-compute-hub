@@ -1,7 +1,7 @@
-package com.blender.hub.computehub.entrypoint.manager;
+package com.blender.hub.computehub.entrypoint.flamenco;
 
-import com.blender.hub.computehub.entrypoint.manager.requests.CreateLinkingHmacKeyRequest;
-import com.blender.hub.computehub.entrypoint.manager.response.CreateLinkingHmacKeyResponse;
+import com.blender.hub.computehub.entrypoint.flamenco.requests.CreateLinkingHmacKeyRequest;
+import com.blender.hub.computehub.entrypoint.flamenco.response.CreateLinkingHmacKeyResponse;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;

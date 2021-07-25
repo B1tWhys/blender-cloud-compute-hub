@@ -23,18 +23,20 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
+
 
 @ExtendWith(MockitoExtension.class)
 class FlamencoManagerProxyTest {
     public static final String MANAGER_HOSTNAME = "localhost";
     public static final int MANAGER_PORT = 1234;
     public static final String MANAGER_SCHEME = "https";
+    public static final String HMAC_ID = "hmac-id";
 
     @Mock
     RestTemplate restTemplate;
 
-    @Mock
     ResponseEntity<Object> responseEntity;
 
     Hostname hostname;
@@ -59,8 +61,9 @@ class FlamencoManagerProxyTest {
 
     @Test
     void linkStartUrlIsCorrect() {
-        when(restTemplate.getForEntity(any(), any())).thenReturn(responseEntity);
-        when(responseEntity.getBody()).thenReturn(new ManagerLinkStartResponse("http://localhost:8080/somepath"));
+        responseEntity = ResponseEntity.status(HttpStatus.PERMANENT_REDIRECT)
+                .body(new ManagerLinkStartResponse("http://localhost:8080/somepath"));
+        when(restTemplate.getForEntity(Mockito.any(URI.class), Mockito.any())).thenReturn(responseEntity);
 
         managerProxy.exchangeHmacSecret();
 
@@ -68,15 +71,44 @@ class FlamencoManagerProxyTest {
                 .path("/setup/api/link-start")
                 .queryParam("server", "http://localhost:8080")
                 .build().toUri();
-        verify(restTemplate).getForEntity(eq(expectedUri), any());
+        verify(restTemplate).getForEntity(Mockito.eq(expectedUri), Mockito.any());
     }
 
     @Test
     void linkStartRequestErrorResultsInLinkingException() {
-        when(restTemplate.getForEntity(any(URI.class), eq(ManagerLinkStartResponse.class)))
+        when(restTemplate.getForEntity(Mockito.any(URI.class), Mockito.eq(ManagerLinkStartResponse.class)))
                 .thenThrow(new HttpClientErrorException(HttpStatus.BAD_REQUEST, "some request error"));
 
         Assertions.assertThrows(LinkingException.class, managerProxy::exchangeHmacSecret);
+    }
+
+    @Test
+    void hmacKeyExtractedFromRedirectUri() {
+        responseEntity = ResponseEntity.status(HttpStatus.PERMANENT_REDIRECT)
+                .body(ManagerLinkStartResponse.builder().location(buildRedirectUrl().toASCIIString()).build());
+        when(restTemplate.getForEntity(Mockito.any(), Mockito.any())).thenReturn(responseEntity);
+
+        String actualHmacId = managerProxy.exchangeHmacSecret();
+
+        assertThat(actualHmacId).isEqualTo(HMAC_ID);
+    }
+
+    @Test
+    void linkingExceptionIfNoRedirectUri() {
+        responseEntity = ResponseEntity.status(HttpStatus.PERMANENT_REDIRECT).build();
+        when(restTemplate.getForEntity(Mockito.any(), Mockito.any())).thenReturn(responseEntity);
+
+        Assertions.assertThrows(LinkingException.class, managerProxy::exchangeHmacSecret);
+    }
+
+    private URI buildRedirectUrl() {
+        return UriComponentsBuilder.newInstance()
+                .host("localhost")
+                .port(1234)
+                .path("/flamenco/managers/link/choose")
+                .queryParam("identifier", HMAC_ID)
+                // .queryParam("hmac", "some hmac value") // TODO: uncomment when ready to test this
+                .build().toUri();
     }
 
     private UriComponentsBuilder baseUriBuilder() {

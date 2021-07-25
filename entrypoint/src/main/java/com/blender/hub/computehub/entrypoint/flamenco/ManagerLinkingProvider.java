@@ -1,8 +1,8 @@
-package com.blender.hub.computehub.entrypoint.manager;
+package com.blender.hub.computehub.entrypoint.flamenco;
 
 import com.blender.hub.computehub.entity.hmac.HmacSecret;
-import com.blender.hub.computehub.entrypoint.manager.requests.CreateLinkingHmacKeyRequest;
-import com.blender.hub.computehub.entrypoint.manager.response.CreateLinkingHmacKeyResponse;
+import com.blender.hub.computehub.entrypoint.flamenco.requests.CreateLinkingHmacKeyRequest;
+import com.blender.hub.computehub.entrypoint.flamenco.response.CreateLinkingHmacKeyResponse;
 import com.blender.hub.computehub.usecase.hmac.usecase.CreateHmacSecretImpl;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

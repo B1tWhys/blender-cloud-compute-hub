@@ -1,4 +1,4 @@
-package com.blender.hub.computehub.entrypoint.manager.requests;
+package com.blender.hub.computehub.entrypoint.flamenco.requests;
 
 import lombok.Data;
 
