@@ -1,5 +1,6 @@
 package com.blender.hub.computehub.usecase.manager;
 
+import com.blender.hub.computehub.usecase.hmac.port.driven.HmacSecretGenerator;
 import com.blender.hub.computehub.usecase.manager.port.driven.*;
 import com.blender.hub.computehub.usecase.hmac.port.driven.HmacSecretIdGenerator;
 import com.blender.hub.computehub.usecase.hmac.port.driven.HmacSecretRepository;
@@ -33,6 +34,9 @@ public abstract class AbstractManagerLinkingTest {
 
     @Mock
     protected HmacSecretIdGenerator hmacIdGenerator;
+
+    @Mock
+    protected HmacSecretGenerator hmacSecretGenerator;
 
     @Mock
     protected ManagerIdGenerator managerIdGenerator;

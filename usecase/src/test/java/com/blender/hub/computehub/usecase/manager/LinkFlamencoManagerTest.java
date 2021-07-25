@@ -1,6 +1,7 @@
 package com.blender.hub.computehub.usecase.manager;
 
 import com.blender.hub.computehub.entity.hmac.HmacSecret;
+import com.blender.hub.computehub.usecase.hmac.port.driven.HmacSecretGenerator;
 import com.blender.hub.computehub.usecase.hmac.usecase.CreateHmacSecretImpl;
 import com.blender.hub.computehub.usecase.manager.usecase.CreateManagerImpl;
 import com.blender.hub.computehub.usecase.manager.usecase.LinkManagerImpl;
@@ -18,6 +19,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 public class LinkFlamencoManagerTest extends AbstractManagerLinkingTest {
+    HmacSecretGenerator secretGenerator;
+
     @BeforeEach
     void setUp() {
         manager = buildUnlinkedManager();
@@ -37,7 +40,7 @@ public class LinkFlamencoManagerTest extends AbstractManagerLinkingTest {
 
     protected void initUseCase() {
         linkManager = new LinkManagerImpl(proxyFactory, managerRepository, hmacSecretRepository);
-        createHmacSecret = new CreateHmacSecretImpl(hmacIdGenerator, hmacSecretRepository);
+        createHmacSecret = new CreateHmacSecretImpl(hmacIdGenerator, hmacSecretRepository, secretGenerator);
         createManager = new CreateManagerImpl(managerIdGenerator, managerRepository, managerInfraProxy, linkManager, timeProvider);
     }
 

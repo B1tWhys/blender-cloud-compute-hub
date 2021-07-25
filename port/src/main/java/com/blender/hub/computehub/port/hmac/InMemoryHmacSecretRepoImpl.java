@@ -27,4 +27,9 @@ public class InMemoryHmacSecretRepoImpl implements HmacSecretRepository {
     public List<HmacSecret> getLatestHmacSecrets(long limit) {
         return secretMap.values().stream().limit(limit).collect(Collectors.toList());
     }
+
+    @Override
+    public void deleteSecret(String secretId) {
+        secretMap.remove(secretId);
+    }
 }

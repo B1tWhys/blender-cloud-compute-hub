@@ -9,4 +9,10 @@ public interface CreateHmacSecret {
      * @return generated sec
      */
     HmacSecret newLinkTimeHmacSecret(String secretValue);
+
+    /**
+     * @param oldSecret secret to be replaced
+     * @return a freshly generated secret
+     */
+    HmacSecret refresh(HmacSecret oldSecret);
 }

@@ -13,4 +13,5 @@ public interface HmacSecretRepository {
 
     List<HmacSecret> getLatestHmacSecrets(long limit);
 
+    void deleteSecret(String secretId);
 }

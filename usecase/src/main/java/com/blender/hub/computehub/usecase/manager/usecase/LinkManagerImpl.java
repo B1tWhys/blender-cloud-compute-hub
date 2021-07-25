@@ -17,11 +17,20 @@ public class LinkManagerImpl implements LinkManager {
     private final HmacSecretRepository hmacRepository;
     
     public void link(FlamencoManager manager) {
+        ManagerProxy proxy = exchangeLinkingHmacSecret(manager);
+        managerRepository.upsert(manager);
+        completeLinking(proxy);
+    }
+
+    private ManagerProxy exchangeLinkingHmacSecret(FlamencoManager manager) {
         ManagerProxy proxy = proxyFactory.buildManagerProxy(manager);
         String keyId = proxy.exchangeHmacSecret(); // TODO: verify hmac value lines up
         manager.setHmacSecret(hmacRepository.getHmacSecret(keyId));
         log.info("manager {} linked to hmac secret id: {}", manager.getId(), keyId);
-        managerRepository.upsert(manager);
+        return proxy;
+    }
+
+    private void completeLinking(ManagerProxy proxy) {
         proxy.completeLinking();
     }
 }
