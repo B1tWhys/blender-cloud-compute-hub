@@ -47,7 +47,7 @@ public class CreateFlamencoManagerTest extends AbstractManagerLinkingTest {
 
     protected void initUseCase() {
         linkManager = new LinkManagerImpl(proxyFactory, managerRepository, hmacSecretRepository);
-        createHmacSecret = new CreateHmacSecretImpl(hmacIdGenerator, hmacSecretRepository, hmacSecretGenerator);
+        createHmacSecret = new CreateHmacSecretImpl(hmacIdGenerator, hmacSecretRepository, hmacSecretValueGenerator);
         createManager = new CreateManagerImpl(managerIdGenerator, managerRepository, managerInfraProxy, linkManager, timeProvider);
     }
 

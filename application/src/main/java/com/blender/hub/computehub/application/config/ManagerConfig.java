@@ -1,6 +1,7 @@
 package com.blender.hub.computehub.application.config;
 
 import com.blender.hub.computehub.port.hmac.HmacSecretIdGeneratorImpl;
+import com.blender.hub.computehub.port.hmac.HmacSecretValueGeneratorImpl;
 import com.blender.hub.computehub.port.manager.LocalDockerManagerInfraProxyImpl;
 import com.blender.hub.computehub.port.manager.ManagerDockerContainerProperties;
 import com.blender.hub.computehub.port.manager.ManagerIdGeneratorImpl;
@@ -8,6 +9,7 @@ import com.blender.hub.computehub.port.manager.ManagerProxyFactoryImpl;
 import com.blender.hub.computehub.port.persistance.InMemoryManagerRepoImpl;
 import com.blender.hub.computehub.usecase.hmac.port.driven.HmacSecretIdGenerator;
 import com.blender.hub.computehub.usecase.hmac.port.driven.HmacSecretRepository;
+import com.blender.hub.computehub.usecase.hmac.port.driven.HmacSecretValueGenerator;
 import com.blender.hub.computehub.usecase.hmac.usecase.CreateHmacSecretImpl;
 import com.blender.hub.computehub.usecase.manager.port.driven.ManagerIdGenerator;
 import com.blender.hub.computehub.usecase.manager.port.driven.ManagerInfraProxy;
@@ -28,6 +30,8 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
+
+import java.security.SecureRandom;
 
 @Configuration
 public class ManagerConfig {
@@ -85,7 +89,17 @@ public class ManagerConfig {
 
     @Bean
     public CreateHmacSecretImpl createHmacSecret(HmacSecretRepository hmacSecretRepository) {
-        return new CreateHmacSecretImpl(secretIdGenerator(), hmacSecretRepository);
+        return new CreateHmacSecretImpl(secretIdGenerator(), hmacSecretRepository, hmacSecretValueGenerator());
+    }
+
+    @Bean
+    public HmacSecretValueGenerator hmacSecretValueGenerator() {
+        return new HmacSecretValueGeneratorImpl(secureRandom());
+    }
+
+    @Bean
+    public SecureRandom secureRandom() {
+        return new SecureRandom();
     }
 
     @Bean

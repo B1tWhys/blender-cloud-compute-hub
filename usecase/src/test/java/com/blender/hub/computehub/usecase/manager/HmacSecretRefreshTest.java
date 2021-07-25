@@ -5,7 +5,6 @@ import com.blender.hub.computehub.usecase.hmac.usecase.CreateHmacSecretImpl;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 
 import java.util.UUID;
@@ -19,7 +18,7 @@ public class HmacSecretRefreshTest extends AbstractManagerLinkingTest {
 
     @BeforeEach
     void setupUsecase() {
-        createHmacSecret = new CreateHmacSecretImpl(hmacIdGenerator, hmacSecretRepository, hmacSecretGenerator);
+        createHmacSecret = new CreateHmacSecretImpl(hmacIdGenerator, hmacSecretRepository, hmacSecretValueGenerator);
     }
 
     @Test
@@ -36,11 +35,11 @@ public class HmacSecretRefreshTest extends AbstractManagerLinkingTest {
     @Test
     void secretRefreshGeneratesNewSecretValue() {
         HmacSecret oldSecret = newStoredHmacSecret();
-        when(hmacSecretGenerator.generate()).thenReturn(NEW_SECRET_VALUE);
+        when(hmacSecretValueGenerator.generate()).thenReturn(NEW_SECRET_VALUE);
 
         HmacSecret newSecret = createHmacSecret.refresh(oldSecret);
 
-        verify(hmacSecretGenerator, times(1)).generate();
+        verify(hmacSecretValueGenerator, times(1)).generate();
         Assertions.assertThat(newSecret.getValue()).isEqualTo(NEW_SECRET_VALUE);
     }
 

@@ -2,7 +2,7 @@ package com.blender.hub.computehub.usecase.hmac.usecase;
 
 import com.blender.hub.computehub.entity.hmac.HmacSecret;
 import com.blender.hub.computehub.usecase.hmac.port.driven.CreateHmacSecret;
-import com.blender.hub.computehub.usecase.hmac.port.driven.HmacSecretGenerator;
+import com.blender.hub.computehub.usecase.hmac.port.driven.HmacSecretValueGenerator;
 import com.blender.hub.computehub.usecase.hmac.port.driven.HmacSecretIdGenerator;
 import com.blender.hub.computehub.usecase.hmac.port.driven.HmacSecretRepository;
 import lombok.AllArgsConstructor;
@@ -13,7 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 public class CreateHmacSecretImpl implements CreateHmacSecret {
     private final HmacSecretIdGenerator secretIdGenerator;
     private final HmacSecretRepository secretRepository;
-    private final HmacSecretGenerator hmacValueGenerator;
+    private final HmacSecretValueGenerator hmacValueGenerator;
 
     @Override
     public HmacSecret newLinkTimeHmacSecret(String secretValue) {
