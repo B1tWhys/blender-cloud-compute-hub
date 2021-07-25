@@ -11,7 +11,7 @@ public class AdminSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .csrf().ignoringAntMatchers("/api/flamenco/managers/link/exchange")
+                .csrf().ignoringAntMatchers("/api/**")
                 .and()
                 .authorizeRequests()
                 .anyRequest().permitAll();
