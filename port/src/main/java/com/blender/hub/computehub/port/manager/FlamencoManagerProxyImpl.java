@@ -30,7 +30,7 @@ public class FlamencoManagerProxyImpl implements ManagerProxy {
         URI startLinkingUri = getHmacExchangeUrl();
         log.debug("hmac secret exchange request to hostname: {} full uri: {}", managerHostname, startLinkingUri.toASCIIString());
 
-        ResponseEntity<ManagerLinkStartResponse> redirectResponse = null;
+        ResponseEntity<ManagerLinkStartResponse> redirectResponse;
         try {
             redirectResponse = restTemplate.getForEntity(startLinkingUri, ManagerLinkStartResponse.class);
         } catch (RestClientException e) {
