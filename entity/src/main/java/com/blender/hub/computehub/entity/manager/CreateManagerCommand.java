@@ -6,5 +6,6 @@ import lombok.Value;
 @Builder
 @Value
 public class CreateManagerCommand {
+    @Builder.Default
     ManagerType managerType = ManagerType.FLAMENCO;
 }

@@ -82,9 +82,12 @@ class LocalDockerFlamencoManagerInfraProxyImplTest {
         verify(createContainerCmd, times(1)).withExposedPorts(ExposedPort.tcp(FLAMENCO_PORT));
         verify(createContainerCmd, times(1)).exec();
 
-        Map<ExposedPort, Ports.Binding[]> bindings = hostConfigArgCaptor.getValue().getPortBindings().getBindings();
+        HostConfig hostConfig = hostConfigArgCaptor.getValue();
+        Map<ExposedPort, Ports.Binding[]> bindings = hostConfig.getPortBindings().getBindings();
         String actualBinding = bindings.get(ExposedPort.tcp(FLAMENCO_PORT))[0].toString();
         assertEquals("0", actualBinding);
+        org.assertj.core.api.Assertions.assertThat(hostConfig.getExtraHosts())
+                .contains("localhost:host-gateway");
     }
 
     @Test
