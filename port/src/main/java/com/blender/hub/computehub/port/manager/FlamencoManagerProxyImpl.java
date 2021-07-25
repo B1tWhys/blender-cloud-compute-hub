@@ -28,28 +28,10 @@ public class FlamencoManagerProxyImpl implements ManagerProxy {
     @Override
     public String exchangeHmacSecret() {
         URI startLinkingUri = getHmacExchangeUrl();
-        log.debug("hmac secret exchange request to hostname: {} full uri: {}", managerHostname, startLinkingUri.toASCIIString());
-
-        ResponseEntity<ManagerLinkStartResponse> redirectResponse;
-        try {
-            redirectResponse = restTemplate.getForEntity(startLinkingUri, ManagerLinkStartResponse.class);
-        } catch (RestClientException e) {
-            log.warn("flamenco manager link start request to {} failed with exception: ", startLinkingUri.toASCIIString(), e);
-            throw new LinkingException("Error on start-link request: " + startLinkingUri.toASCIIString(), e);
-        }
-
-        URI redirect = Optional.of(redirectResponse)
-                .map(ResponseEntity::getBody)
-                .map(ManagerLinkStartResponse::getLocation)
-                .map(UriComponentsBuilder::fromUriString)
-                .map(UriComponentsBuilder::build)
-                .map(UriComponents::toUri)
-                .orElseThrow(() -> new LinkingException("Error extracting redirect URI from hmac secret request"));
-
-        log.debug("hmac redirect: {}", redirect);
-
-        // TODO: verify hmac value also passed in request
-        return UriComponentsBuilder.fromUri(redirect).build().getQueryParams().getFirst("identifier");
+        ResponseEntity<ManagerLinkStartResponse> response = makeLinkStartRequest(startLinkingUri);
+        String keyId = extractKeyId(response);
+        // TODO: extract & verify hmac value that should also have been returned
+        return keyId;
     }
 
     private URI getHmacExchangeUrl() {
@@ -81,6 +63,32 @@ public class FlamencoManagerProxyImpl implements ManagerProxy {
                 .hostname(request.getServerName())
                 .port(request.getServerPort())
                 .build();
+    }
+
+    private ResponseEntity<ManagerLinkStartResponse> makeLinkStartRequest(URI startLinkingUri) {
+        log.debug("making link start request to hostname: {} full uri: {}",
+                managerHostname, startLinkingUri.toASCIIString());
+        ResponseEntity<ManagerLinkStartResponse> response;
+        try {
+            response = restTemplate.getForEntity(startLinkingUri, ManagerLinkStartResponse.class);
+        } catch (RestClientException e) {
+            log.warn("flamenco manager link start request to {} failed with exception: ", startLinkingUri.toASCIIString(), e);
+            throw new LinkingException("Error on start-link request: " + startLinkingUri.toASCIIString(), e);
+        }
+        return response;
+    }
+
+    private String extractKeyId(ResponseEntity<ManagerLinkStartResponse> redirectResponse) {
+        URI redirect = Optional.of(redirectResponse)
+                .map(ResponseEntity::getBody)
+                .map(ManagerLinkStartResponse::getLocation)
+                .map(UriComponentsBuilder::fromUriString)
+                .map(UriComponentsBuilder::build)
+                .map(UriComponents::toUri)
+                .orElseThrow(() -> new LinkingException("Error extracting redirect URI from hmac secret request"));
+        log.debug("hmac redirect: {}", redirect);
+        String keyId = UriComponentsBuilder.fromUri(redirect).build().getQueryParams().getFirst("identifier");
+        return keyId;
     }
 
     @Override
