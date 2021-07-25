@@ -1,17 +1,21 @@
 package com.blender.hub.computehub.manager;
 
 import com.blender.hub.computehub.entity.manager.Hostname;
+import com.blender.hub.computehub.entity.manager.LinkingException;
 import com.blender.hub.computehub.port.manager.FlamencoManagerProxyImpl;
 import com.blender.hub.computehub.port.manager.ManagerLinkStartResponse;
 import com.blender.hub.computehub.usecase.manager.port.driven.ManagerProxy;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -22,7 +26,7 @@ import java.net.URI;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class FlamencoManagerProxyImplTest {
+class FlamencoManagerProxyTest {
     public static final String MANAGER_HOSTNAME = "localhost";
     public static final int MANAGER_PORT = 1234;
     public static final String MANAGER_SCHEME = "https";
@@ -51,19 +55,28 @@ class FlamencoManagerProxyImplTest {
                 .port(MANAGER_PORT)
                 .build();
         managerProxy = new FlamencoManagerProxyImpl(restTemplate, hostname);
-        when(restTemplate.getForEntity(any(), any())).thenReturn(responseEntity);
-        when(responseEntity.getBody()).thenReturn(new ManagerLinkStartResponse("http://localhost:8080/somepath"));
     }
 
     @Test
-    void linkRequestUrlTest() {
+    void linkStartUrlIsCorrect() {
+        when(restTemplate.getForEntity(any(), any())).thenReturn(responseEntity);
+        when(responseEntity.getBody()).thenReturn(new ManagerLinkStartResponse("http://localhost:8080/somepath"));
+
         managerProxy.exchangeHmacSecret();
 
         URI expectedUri = baseUriBuilder()
                 .path("/setup/api/link-start")
                 .queryParam("server", "http://localhost:8080")
                 .build().toUri();
-        verify(restTemplate).getForEntity(Mockito.eq(expectedUri), any());
+        verify(restTemplate).getForEntity(eq(expectedUri), any());
+    }
+
+    @Test
+    void linkStartRequestErrorResultsInLinkingException() {
+        when(restTemplate.getForEntity(any(URI.class), eq(ManagerLinkStartResponse.class)))
+                .thenThrow(new HttpClientErrorException(HttpStatus.BAD_REQUEST, "some request error"));
+
+        Assertions.assertThrows(LinkingException.class, managerProxy::exchangeHmacSecret);
     }
 
     private UriComponentsBuilder baseUriBuilder() {

@@ -34,6 +34,7 @@ public class FlamencoManagerProxyImpl implements ManagerProxy {
         try {
             redirectResponse = restTemplate.getForEntity(startLinkingUri, ManagerLinkStartResponse.class);
         } catch (RestClientException e) {
+            log.warn("flamenco manager link start request to {} failed with exception: ", startLinkingUri.toASCIIString(), e);
             throw new LinkingException("Error on start-link request: " + startLinkingUri.toASCIIString(), e);
         }
 
@@ -43,7 +44,7 @@ public class FlamencoManagerProxyImpl implements ManagerProxy {
                 .map(UriComponentsBuilder::fromUriString)
                 .map(UriComponentsBuilder::build)
                 .map(UriComponents::toUri)
-                .orElseThrow();
+                .orElseThrow(() -> new LinkingException("Error extracting redirect URI from hmac secret request"));
 
         log.debug("hmac redirect: {}", redirect);
 
