@@ -4,12 +4,15 @@ package com.blender.hub.computehub.usecase.hmac.port.driven;
 import com.blender.hub.computehub.entity.hmac.HmacSecret;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface HmacSecretRepository {
     
     void storeHmacSecret(HmacSecret secret);
     
     HmacSecret getHmacSecret(String secretId);
+
+    Optional<HmacSecret> getForManager(String managerId);
 
     List<HmacSecret> getLatestHmacSecrets(long limit);
 

@@ -5,6 +5,8 @@ import com.blender.hub.computehub.entity.manager.CreateManagerCommand;
 import com.blender.hub.computehub.entity.manager.Hostname;
 import com.blender.hub.computehub.entity.manager.ManagerState;
 import com.blender.hub.computehub.entity.manager.ManagerType;
+import com.blender.hub.computehub.usecase.hmac.port.driven.HmacValidator;
+import com.blender.hub.computehub.usecase.hmac.port.driven.HmacValidatorFactory;
 import com.blender.hub.computehub.usecase.hmac.usecase.CreateHmacSecretImpl;
 import com.blender.hub.computehub.usecase.manager.entity.FlamencoManager;
 import com.blender.hub.computehub.usecase.manager.usecase.CreateManagerImpl;
@@ -47,7 +49,8 @@ public class CreateFlamencoManagerTest extends AbstractManagerLinkingTest {
 
     protected void initUseCase() {
         linkManager = new LinkManagerImpl(proxyFactory, managerRepository, hmacSecretRepository);
-        createHmacSecret = new CreateHmacSecretImpl(hmacIdGenerator, hmacSecretRepository, hmacSecretValueGenerator);
+        createHmacSecret = new CreateHmacSecretImpl(hmacIdGenerator, hmacSecretRepository, hmacSecretValueGenerator,
+                hmacSecret -> Mockito.mock(HmacValidator.class));
         createManager = new CreateManagerImpl(managerIdGenerator, managerRepository, managerInfraProxy, linkManager, timeProvider);
     }
 

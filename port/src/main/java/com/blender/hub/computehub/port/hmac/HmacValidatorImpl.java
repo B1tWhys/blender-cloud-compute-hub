@@ -18,6 +18,7 @@ import java.security.MessageDigest;
 public class HmacValidatorImpl implements HmacValidator {
     HmacSecret secret;
 
+    @Override
     public void validate(String message, String mac) throws AuthenticationException {
         byte[] actualDigest = digest(mac);
         byte[] expectedDigest = macToHex(mac);
@@ -27,6 +28,12 @@ public class HmacValidatorImpl implements HmacValidator {
                     Hex.encodeHexString(expectedDigest), Hex.encodeHexString(actualDigest));
             throw new AuthenticationException("Validation failed with hmac secret id: " + secret.getId());
         }
+    }
+
+    @Override
+    public void validate(String rawMessage, String padding, String mac) throws AuthenticationException {
+        String message = padding + "-" + rawMessage;
+        validate(message, mac);
     }
 
     private byte[] macToHex(String mac) throws AuthenticationException {

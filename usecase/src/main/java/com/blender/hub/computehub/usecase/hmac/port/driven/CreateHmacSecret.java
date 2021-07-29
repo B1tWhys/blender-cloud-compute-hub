@@ -1,6 +1,7 @@
 package com.blender.hub.computehub.usecase.hmac.port.driven;
 
 import com.blender.hub.computehub.entity.hmac.HmacSecret;
+import com.blender.hub.computehub.usecase.hmac.usecase.HmacResetCommand;
 
 public interface CreateHmacSecret {
     /**
@@ -14,5 +15,5 @@ public interface CreateHmacSecret {
      * @param oldSecret secret to be replaced
      * @return a freshly generated secret
      */
-    HmacSecret refresh(HmacSecret oldSecret);
+    HmacSecret refresh(HmacResetCommand hmacResetCommand) throws AuthenticationException;
 }

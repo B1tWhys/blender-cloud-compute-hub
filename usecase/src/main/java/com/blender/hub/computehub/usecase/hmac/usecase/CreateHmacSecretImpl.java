@@ -1,10 +1,7 @@
 package com.blender.hub.computehub.usecase.hmac.usecase;
 
 import com.blender.hub.computehub.entity.hmac.HmacSecret;
-import com.blender.hub.computehub.usecase.hmac.port.driven.CreateHmacSecret;
-import com.blender.hub.computehub.usecase.hmac.port.driven.HmacSecretValueGenerator;
-import com.blender.hub.computehub.usecase.hmac.port.driven.HmacSecretIdGenerator;
-import com.blender.hub.computehub.usecase.hmac.port.driven.HmacSecretRepository;
+import com.blender.hub.computehub.usecase.hmac.port.driven.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -14,6 +11,7 @@ public class CreateHmacSecretImpl implements CreateHmacSecret {
     private final HmacSecretIdGenerator secretIdGenerator;
     private final HmacSecretRepository secretRepository;
     private final HmacSecretValueGenerator hmacValueGenerator;
+    private final HmacValidatorFactory hmacValidatorFactory;
 
     @Override
     public HmacSecret newLinkTimeHmacSecret(String secretValue) {
@@ -26,7 +24,10 @@ public class CreateHmacSecretImpl implements CreateHmacSecret {
     }
 
     @Override
-    public HmacSecret refresh(HmacSecret oldSecret) {
+    public HmacSecret refresh(HmacResetCommand resetCommand) throws AuthenticationException {
+        HmacSecret oldSecret = secretRepository.getForManager(resetCommand.getManagerId())
+                .orElseThrow(() -> new AuthenticationException("Manager not authorized to refresh token."));
+
         HmacSecret newSecret = HmacSecret.builder()
                 .id(secretIdGenerator.generate())
                 .value(hmacValueGenerator.generate())
