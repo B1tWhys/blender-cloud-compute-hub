@@ -26,7 +26,7 @@ public class HmacValidatorImpl implements HmacValidator {
 
     @Override
     public void validate(String message, String mac) throws AuthenticationException {
-        byte[] actualDigest = digest(mac);
+        byte[] actualDigest = digest(message);
         byte[] expectedDigest = macToBytes(mac);
 
         if (!MessageDigest.isEqual(actualDigest, expectedDigest)) {
