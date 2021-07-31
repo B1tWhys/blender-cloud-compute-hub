@@ -12,8 +12,6 @@ public interface HmacSecretRepository {
     
     HmacSecret getHmacSecret(String secretId);
 
-    Optional<HmacSecret> getForManager(String managerId);
-
     List<HmacSecret> getLatestHmacSecrets(long limit);
 
     void deleteSecret(String secretId);

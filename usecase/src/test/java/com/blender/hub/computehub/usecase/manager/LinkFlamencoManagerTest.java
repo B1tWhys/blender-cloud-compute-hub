@@ -4,6 +4,7 @@ import com.blender.hub.computehub.entity.hmac.HmacSecret;
 import com.blender.hub.computehub.usecase.hmac.port.driven.HmacSecretValueGenerator;
 import com.blender.hub.computehub.usecase.hmac.port.driven.HmacValidator;
 import com.blender.hub.computehub.usecase.hmac.usecase.CreateHmacSecretImpl;
+import com.blender.hub.computehub.usecase.manager.port.driven.ManagerRepo;
 import com.blender.hub.computehub.usecase.manager.usecase.CreateManagerImpl;
 import com.blender.hub.computehub.usecase.manager.usecase.LinkManagerImpl;
 import com.blender.hub.computehub.usecase.manager.entity.FlamencoManager;
@@ -40,9 +41,10 @@ public class LinkFlamencoManagerTest extends AbstractManagerLinkingTest {
     }
 
     protected void initUseCase() {
+        ManagerRepo managerRepo = Mockito.mock(ManagerRepo.class);
         linkManager = new LinkManagerImpl(proxyFactory, managerRepository, hmacSecretRepository);
         createHmacSecret = new CreateHmacSecretImpl(hmacIdGenerator, hmacSecretRepository, secretGenerator,
-                hmacSecret -> Mockito.mock(HmacValidator.class));
+                hmacSecret -> Mockito.mock(HmacValidator.class), managerRepo);
         createManager = new CreateManagerImpl(managerIdGenerator, managerRepository, managerInfraProxy, linkManager, timeProvider);
     }
 

@@ -5,6 +5,7 @@ import com.blender.hub.computehub.usecase.hmac.port.driven.AuthenticationExcepti
 import com.blender.hub.computehub.usecase.hmac.port.driven.HmacValidator;
 import com.blender.hub.computehub.usecase.hmac.usecase.CreateHmacSecretImpl;
 import com.blender.hub.computehub.usecase.hmac.usecase.HmacResetCommand;
+import com.blender.hub.computehub.usecase.manager.entity.FlamencoManager;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,14 +33,21 @@ public class HmacSecretRefreshTest extends AbstractManagerLinkingTest {
     @BeforeEach
     void setupUsecase() {
         createHmacSecret = new CreateHmacSecretImpl(hmacIdGenerator, hmacSecretRepository, hmacSecretValueGenerator,
-                hmacSecret -> validator);
+                hmacSecret -> validator, managerRepository);
+    }
+
+    void setupDefaultMocks() {
+        when(hmacIdGenerator.generate()).thenReturn(NEW_SECRET_ID);
+        when(managerRepository.get(MANAGER_ID)).thenReturn(
+                Optional.of(FlamencoManager.builder()
+                        .id(MANAGER_ID)
+                        .hmacSecret(oldSecret())
+                        .build()));
     }
 
     @Test
     void secretRefreshGeneratesNewSecretId() throws AuthenticationException {
-        when(hmacIdGenerator.generate()).thenReturn(NEW_SECRET_ID);
-        when(hmacSecretRepository.getForManager(Mockito.eq(MANAGER_ID)))
-                .thenReturn(Optional.of(oldSecret()));
+        setupDefaultMocks();
 
         HmacSecret newSecret = createHmacSecret.refresh(refreshCommand());
 
@@ -51,8 +59,11 @@ public class HmacSecretRefreshTest extends AbstractManagerLinkingTest {
     @Test
     void secretRefreshGeneratesNewSecretValue() throws AuthenticationException {
         when(hmacSecretValueGenerator.generate()).thenReturn(NEW_SECRET_VALUE);
-        when(hmacSecretRepository.getForManager(Mockito.eq(MANAGER_ID)))
-                .thenReturn(Optional.of(oldSecret()));
+        when(managerRepository.get(MANAGER_ID)).thenReturn(
+                Optional.of(FlamencoManager.builder()
+                        .id(MANAGER_ID)
+                        .hmacSecret(oldSecret())
+                        .build()));
 
         HmacSecret newSecret = createHmacSecret.refresh(refreshCommand());
 
@@ -62,20 +73,16 @@ public class HmacSecretRefreshTest extends AbstractManagerLinkingTest {
 
     @Test
     void secretRefreshDeletesOldSecret() throws AuthenticationException {
-        HmacSecret oldSecret = hmacSecret();
-        when(hmacSecretRepository.getForManager(Mockito.eq(MANAGER_ID)))
-                .thenReturn(Optional.of(oldSecret));
+        setupDefaultMocks();
 
         createHmacSecret.refresh(refreshCommand());
 
-        verify(hmacSecretRepository, times(1)).deleteSecret(oldSecret.getId());
+        verify(hmacSecretRepository, times(1)).deleteSecret(OLD_SECRET_ID);
     }
 
     @Test
     void newSecretIsStored() throws AuthenticationException {
-        when(hmacSecretValueGenerator.generate()).thenReturn(NEW_SECRET_VALUE);
-        when(hmacSecretRepository.getForManager(Mockito.eq(MANAGER_ID)))
-                .thenReturn(Optional.of(oldSecret()));
+        setupDefaultMocks();
 
         HmacSecret newSecret = createHmacSecret.refresh(refreshCommand());
 
@@ -87,8 +94,11 @@ public class HmacSecretRefreshTest extends AbstractManagerLinkingTest {
         HmacSecret oldSecret = oldSecret();
         Mockito.doThrow(new RuntimeException("some exception"))
                 .when(hmacSecretRepository).deleteSecret(Mockito.anyString());
-        when(hmacSecretRepository.getForManager(Mockito.eq(MANAGER_ID)))
-                .thenReturn(Optional.of(oldSecret));
+        when(managerRepository.get(MANAGER_ID)).thenReturn(
+                Optional.of(FlamencoManager.builder()
+                        .id(MANAGER_ID)
+                        .hmacSecret(oldSecret)
+                        .build()));
 
         HmacSecret newSecret = createHmacSecret.refresh(refreshCommand());
         verify(hmacSecretRepository, times(1)).storeHmacSecret(Mockito.eq(newSecret));

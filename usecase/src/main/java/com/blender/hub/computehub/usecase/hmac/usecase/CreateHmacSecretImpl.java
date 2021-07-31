@@ -2,6 +2,8 @@ package com.blender.hub.computehub.usecase.hmac.usecase;
 
 import com.blender.hub.computehub.entity.hmac.HmacSecret;
 import com.blender.hub.computehub.usecase.hmac.port.driven.*;
+import com.blender.hub.computehub.usecase.manager.entity.FlamencoManager;
+import com.blender.hub.computehub.usecase.manager.port.driven.ManagerRepo;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -12,6 +14,7 @@ public class CreateHmacSecretImpl implements CreateHmacSecret {
     private final HmacSecretRepository secretRepository;
     private final HmacSecretValueGenerator hmacValueGenerator;
     private final HmacValidatorFactory hmacValidatorFactory;
+    private final ManagerRepo managerRepo;
 
     @Override
     public HmacSecret newLinkTimeHmacSecret(String secretValue) {
@@ -25,8 +28,10 @@ public class CreateHmacSecretImpl implements CreateHmacSecret {
 
     @Override
     public HmacSecret refresh(HmacResetCommand resetCommand) throws AuthenticationException {
-        HmacSecret oldSecret = secretRepository.getForManager(resetCommand.getManagerId())
-                .orElseThrow(() -> new AuthenticationException("Manager not authorized to refresh token."));
+        FlamencoManager manager = managerRepo.get(resetCommand.getManagerId())
+                .filter(m -> m instanceof FlamencoManager)
+                .orElseThrow(() -> new AuthenticationException("Manager not authorized to refresh token"));
+        HmacSecret oldSecret = manager.getHmacSecret();
 
         HmacSecret newSecret = HmacSecret.builder()
                 .id(secretIdGenerator.generate())
