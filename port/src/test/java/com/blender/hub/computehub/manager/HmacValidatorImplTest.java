@@ -7,14 +7,16 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class HmacValidatorImplTest {
+    public static final String SECRET_ID = "9cbb53d7-7f23-4a53-8ff8-b976814fd0b5";
+    public static final String SECRET_VALUE = "d091f27aaa7fb0561327b7f475e334dca112c1785d522310263c640d6042d5fa";
     HmacValidatorImpl validator;
     HmacSecret secret;
 
     @BeforeEach
     void setUp() {
         secret = HmacSecret.builder()
-                .id("9cbb53d7-7f23-4a53-8ff8-b976814fd0b5")
-                .value("d091f27aaa7fb0561327b7f475e334dca112c1785d522310263c640d6042d5fa")
+                .id(SECRET_ID)
+                .value(SECRET_VALUE)
                 .build();
         validator = new HmacValidatorImpl(secret);
     }

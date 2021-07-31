@@ -27,7 +27,7 @@ public class HmacValidatorImpl implements HmacValidator {
     @Override
     public void validate(String message, String mac) throws AuthenticationException {
         byte[] actualDigest = digest(mac);
-        byte[] expectedDigest = macToHex(mac);
+        byte[] expectedDigest = macToBytes(mac);
 
         if (!MessageDigest.isEqual(actualDigest, expectedDigest)) {
             log.debug("Hmac digest mismatch with secret id {}. Expected hmac: {}, actual hmac: {}", secret.getId(),
@@ -48,7 +48,7 @@ public class HmacValidatorImpl implements HmacValidator {
         return hmacUtils.hmac(message);
     }
 
-    private byte[] macToHex(String mac) throws AuthenticationException {
+    private byte[] macToBytes(String mac) throws AuthenticationException {
         byte[] expectedDigest;
         try {
             expectedDigest = Hex.decodeHex(mac);
