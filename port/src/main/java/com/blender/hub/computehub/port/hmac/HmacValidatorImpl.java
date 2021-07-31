@@ -19,6 +19,12 @@ public class HmacValidatorImpl implements HmacValidator {
     HmacSecret secret;
 
     @Override
+    public void validate(String rawMessage, String padding, String mac) throws AuthenticationException {
+        String message = padding + "-" + rawMessage;
+        validate(message, mac);
+    }
+
+    @Override
     public void validate(String message, String mac) throws AuthenticationException {
         byte[] actualDigest = digest(mac);
         byte[] expectedDigest = macToHex(mac);
@@ -28,22 +34,6 @@ public class HmacValidatorImpl implements HmacValidator {
                     Hex.encodeHexString(expectedDigest), Hex.encodeHexString(actualDigest));
             throw new AuthenticationException("Validation failed with hmac secret id: " + secret.getId());
         }
-    }
-
-    @Override
-    public void validate(String rawMessage, String padding, String mac) throws AuthenticationException {
-        String message = padding + "-" + rawMessage;
-        validate(message, mac);
-    }
-
-    private byte[] macToHex(String mac) throws AuthenticationException {
-        byte[] expectedDigest;
-        try {
-            expectedDigest = Hex.decodeHex(mac);
-        } catch (DecoderException e) {
-            throw new AuthenticationException("invalid mac: " + mac, e);
-        }
-        return expectedDigest;
     }
 
     private byte[] digest(String rawMsg) throws AuthenticationException {
@@ -56,5 +46,15 @@ public class HmacValidatorImpl implements HmacValidator {
         HmacUtils hmacUtils = new HmacUtils(HmacAlgorithms.HMAC_SHA_256, key);
         byte[] message = (secret.getId() + "-" + rawMsg).getBytes(StandardCharsets.UTF_8);
         return hmacUtils.hmac(message);
+    }
+
+    private byte[] macToHex(String mac) throws AuthenticationException {
+        byte[] expectedDigest;
+        try {
+            expectedDigest = Hex.decodeHex(mac);
+        } catch (DecoderException e) {
+            throw new AuthenticationException("invalid mac: " + mac, e);
+        }
+        return expectedDigest;
     }
 }

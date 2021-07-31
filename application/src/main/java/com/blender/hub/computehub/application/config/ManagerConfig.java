@@ -2,6 +2,7 @@ package com.blender.hub.computehub.application.config;
 
 import com.blender.hub.computehub.port.hmac.HmacSecretIdGeneratorImpl;
 import com.blender.hub.computehub.port.hmac.HmacSecretValueGeneratorImpl;
+import com.blender.hub.computehub.port.hmac.HmacValidatorImpl;
 import com.blender.hub.computehub.port.manager.LocalDockerManagerInfraProxyImpl;
 import com.blender.hub.computehub.port.manager.ManagerDockerContainerProperties;
 import com.blender.hub.computehub.port.manager.ManagerIdGeneratorImpl;
@@ -10,6 +11,7 @@ import com.blender.hub.computehub.port.persistance.InMemoryManagerRepoImpl;
 import com.blender.hub.computehub.usecase.hmac.port.driven.HmacSecretIdGenerator;
 import com.blender.hub.computehub.usecase.hmac.port.driven.HmacSecretRepository;
 import com.blender.hub.computehub.usecase.hmac.port.driven.HmacSecretValueGenerator;
+import com.blender.hub.computehub.usecase.hmac.port.driven.HmacValidator;
 import com.blender.hub.computehub.usecase.hmac.usecase.CreateHmacSecretImpl;
 import com.blender.hub.computehub.usecase.manager.port.driven.ManagerIdGenerator;
 import com.blender.hub.computehub.usecase.manager.port.driven.ManagerInfraProxy;
@@ -88,8 +90,9 @@ public class ManagerConfig {
     }
 
     @Bean
-    public CreateHmacSecretImpl createHmacSecret(HmacSecretRepository hmacSecretRepository) {
-        return new CreateHmacSecretImpl(secretIdGenerator(), hmacSecretRepository, hmacSecretValueGenerator());
+    public CreateHmacSecretImpl createHmacSecret(HmacSecretRepository hmacSecretRepository, ManagerRepo managerRepo) {
+        return new CreateHmacSecretImpl(secretIdGenerator(), hmacSecretRepository, hmacSecretValueGenerator(),
+                HmacValidatorImpl::new, managerRepo);
     }
 
     @Bean
