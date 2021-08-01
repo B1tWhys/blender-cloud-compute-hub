@@ -5,9 +5,6 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>entrypoint</module>
-        <module>entity</module>
-        <module>usecase</module>
         <module>flamenco</module>
     </modules>
 

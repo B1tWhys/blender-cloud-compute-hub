@@ -6,7 +6,6 @@ import com.blender.hub.computehub.entity.manager.Hostname;
 import com.blender.hub.computehub.entity.manager.ManagerState;
 import com.blender.hub.computehub.entity.manager.ManagerType;
 import com.blender.hub.computehub.usecase.hmac.port.driven.HmacValidator;
-import com.blender.hub.computehub.usecase.hmac.port.driven.HmacValidatorFactory;
 import com.blender.hub.computehub.usecase.hmac.usecase.CreateHmacSecretImpl;
 import com.blender.hub.computehub.usecase.manager.entity.FlamencoManager;
 import com.blender.hub.computehub.usecase.manager.usecase.CreateManagerImpl;

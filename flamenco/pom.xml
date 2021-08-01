@@ -15,6 +15,9 @@
     <modules>
         <module>application</module>
         <module>port</module>
+        <module>entrypoint</module>
+        <module>entity</module>
+        <module>usecase</module>
     </modules>
 
     <properties>

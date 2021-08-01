@@ -4,7 +4,6 @@ package com.blender.hub.computehub.usecase.hmac.port.driven;
 import com.blender.hub.computehub.entity.hmac.HmacSecret;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface HmacSecretRepository {
     
